@@ -1,4 +1,5 @@
 import "server-only";
+import nodemailer from "nodemailer";
 import { site } from "./site";
 import { formatINR } from "./utils";
 
@@ -26,34 +27,55 @@ type MailOrder = {
   };
 };
 
-function resendConfigured() {
-  return Boolean(process.env.RESEND_API_KEY?.trim() && process.env.EMAIL_FROM?.trim());
+function smtpConfigured() {
+  return Boolean(
+    process.env.SMTP_HOST?.trim() &&
+      process.env.SMTP_USER?.trim() &&
+      process.env.SMTP_PASS?.trim() &&
+      process.env.EMAIL_FROM?.trim(),
+  );
+}
+
+function fromAddress() {
+  return process.env.EMAIL_FROM!.trim();
+}
+
+let transporter: nodemailer.Transporter | null = null;
+
+function getTransporter() {
+  if (transporter) return transporter;
+  const port = Number(process.env.SMTP_PORT || 465);
+  transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port,
+    secure: port === 465,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+  return transporter;
 }
 
 async function sendEmail(to: string | string[], subject: string, html: string) {
-  if (!resendConfigured()) {
-    console.warn("[mail] RESEND_API_KEY / EMAIL_FROM not set — skipped:", subject, "→", to);
+  if (!smtpConfigured()) {
+    console.warn("[mail] SMTP not configured — skipped:", subject, "→", to);
     return { ok: false as const, reason: "not_configured" };
   }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: process.env.EMAIL_FROM,
-      to: Array.isArray(to) ? to : [to],
+  try {
+    await getTransporter().sendMail({
+      from: fromAddress(),
+      to: Array.isArray(to) ? to.join(", ") : to,
+      replyTo: process.env.EMAIL_REPLY_TO?.trim() || site.email,
       subject,
       html,
-    }),
-  });
-  if (!res.ok) {
-    const body = await res.text();
-    console.error("[mail] Resend failed", res.status, body);
-    return { ok: false as const, reason: body };
+    });
+    return { ok: true as const };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("[mail] SMTP send failed", message);
+    return { ok: false as const, reason: message };
   }
-  return { ok: true as const };
 }
 
 function itemsHtml(order: MailOrder) {
