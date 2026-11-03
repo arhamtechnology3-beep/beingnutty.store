@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Hostinger (and some other hosts) block Turbopack's PostCSS child-process sockets.
+  // Production builds use `next build --webpack`; this keeps local `next dev` working.
+  experimental: {
+    turbopackPluginRuntimeStrategy: "workerThreads",
+  },
   turbopack: {
     root: process.cwd(),
     rules: {
