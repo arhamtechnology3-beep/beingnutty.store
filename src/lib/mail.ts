@@ -251,14 +251,18 @@ export async function sendOrderConfirmationEmail(order: MailOrder) {
   return sendEmail(order.email, `Being Nutty — order #${order.number} confirmed`, html);
 }
 
-/** Seller inboxes: ORDER_NOTIFY_EMAIL, ADMIN_EMAIL, support — skip invalid placeholders. */
+/**
+ * Seller inboxes for new-order alerts.
+ * Do NOT use ADMIN_EMAIL here — that is often only a login id (e.g. admin@beingnutty.in)
+ * and may not be a real mailbox (bounce: domain not found).
+ */
 export function sellerNotifyRecipients() {
-  const candidates = [process.env.ORDER_NOTIFY_EMAIL, process.env.ADMIN_EMAIL, process.env.EMAIL_REPLY_TO, site.email];
+  const candidates = [process.env.ORDER_NOTIFY_EMAIL, process.env.EMAIL_REPLY_TO, site.email];
   const unique = new Set<string>();
   for (const c of candidates) {
     if (isRealEmail(c)) unique.add(c!.trim().toLowerCase());
   }
-  unique.delete((process.env.SMTP_USER || "").trim().toLowerCase());
+  // Avoid mailing the SMTP "from" mailbox only to itself unless it's also listed above.
   return [...unique];
 }
 
