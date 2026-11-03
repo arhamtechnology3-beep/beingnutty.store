@@ -1,9 +1,10 @@
 import "server-only";
 import { db } from "./db";
 import { addOrderEvent } from "./order-events";
+import { visualsForOrderItems } from "./order-images";
 import { notifyOrderPlaced, sendShippingUpdateEmail, type MailOrder } from "./mail";
 
-function toMailOrder(order: {
+async function toMailOrder(order: {
   id: string;
   number: number;
   email: string;
@@ -18,8 +19,9 @@ function toMailOrder(order: {
   courier: string | null;
   trackingNumber: string | null;
   shippingAddress: unknown;
-  items: { productTitle: string; variantTitle: string; quantity: number; price: number }[];
-}): MailOrder {
+  items: { variantId: string | null; productTitle: string; variantTitle: string; quantity: number; price: number }[];
+}): Promise<MailOrder> {
+  const visuals = await visualsForOrderItems(order.items);
   return {
     id: order.id,
     number: order.number,
@@ -34,7 +36,13 @@ function toMailOrder(order: {
     sourceChannel: order.sourceChannel,
     courier: order.courier,
     trackingNumber: order.trackingNumber,
-    items: order.items,
+    items: order.items.map((i) => ({
+      productTitle: i.productTitle,
+      variantTitle: i.variantTitle,
+      quantity: i.quantity,
+      price: i.price,
+      imageUrl: i.variantId ? visuals.get(i.variantId)?.imageAbsolute ?? null : null,
+    })),
     shippingAddress: order.shippingAddress as MailOrder["shippingAddress"],
   };
 }
@@ -47,7 +55,7 @@ export async function afterOrderConfirmed(orderId: string) {
   });
   if (!order) return;
 
-  const payload = toMailOrder(order);
+  const payload = await toMailOrder(order);
   const result = await notifyOrderPlaced(payload);
 
   if (result.customer.ok) {
@@ -75,7 +83,7 @@ export async function afterOrderShipped(orderId: string) {
     include: { items: true },
   });
   if (!order) return;
-  const result = await sendShippingUpdateEmail(toMailOrder(order));
+  const result = await sendShippingUpdateEmail(await toMailOrder(order));
   if (result.ok) {
     await addOrderEvent(orderId, "SHIPPING_EMAIL_SENT", `Shipping update emailed to ${order.email}`);
   } else {

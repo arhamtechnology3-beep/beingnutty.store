@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buttonClass, Card, inputClass, StatusBadge } from "@/components/admin/ui";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { visualsForOrderItems } from "@/lib/order-images";
 import { formatINR } from "@/lib/utils";
 import { updateOrder } from "../actions";
 
@@ -49,6 +51,7 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
   if (!order) notFound();
   const address = order.shippingAddress as Address;
   const journey = (Array.isArray(order.journey) ? order.journey : []) as JourneyEvent[];
+  const visuals = await visualsForOrderItems(order.items);
   const priorOrders = order.customerId
     ? await db.order.count({ where: { customerId: order.customerId, id: { not: order.id } } })
     : await db.order.count({ where: { email: order.email, id: { not: order.id } } });
@@ -74,20 +77,33 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
           <Card>
             <h2 className="font-semibold">Items</h2>
             <ul className="mt-3 divide-y divide-black/5">
-              {order.items.map((item) => (
-                <li key={item.id} className="flex justify-between gap-4 py-3 text-sm">
-                  <span>
-                    <span className="block font-medium">{item.productTitle}</span>
-                    <span className="text-black/50">
-                      {item.variantTitle} · {item.sku}
+              {order.items.map((item) => {
+                const visual = item.variantId ? visuals.get(item.variantId) : undefined;
+                return (
+                  <li key={item.id} className="flex items-center justify-between gap-4 py-3 text-sm">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div
+                        className="relative size-14 shrink-0 overflow-hidden rounded-xl"
+                        style={{ background: `color-mix(in oklab, ${visual?.accentColor ?? "#d08a3c"} 40%, white)` }}
+                      >
+                        {visual?.image ? (
+                          <Image src={visual.image} alt="" fill sizes="56px" className="object-cover" />
+                        ) : null}
+                      </div>
+                      <span className="min-w-0">
+                        <span className="block font-medium">{item.productTitle}</span>
+                        <span className="text-black/50">
+                          {item.variantTitle} · {item.sku}
+                        </span>
+                      </span>
+                    </div>
+                    <span className="shrink-0 text-right tabular-nums">
+                      {formatINR(item.price)} × {item.quantity}
+                      <span className="block font-semibold">{formatINR(item.price * item.quantity)}</span>
                     </span>
-                  </span>
-                  <span className="text-right tabular-nums">
-                    {formatINR(item.price)} × {item.quantity}
-                    <span className="block font-semibold">{formatINR(item.price * item.quantity)}</span>
-                  </span>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
             <dl className="mt-3 space-y-1.5 border-t border-black/10 pt-3 text-sm">
               <Line label="Subtotal" value={formatINR(order.subtotal)} />

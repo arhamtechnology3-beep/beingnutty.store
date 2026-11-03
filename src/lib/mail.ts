@@ -17,7 +17,13 @@ export type MailOrder = {
   sourceChannel: string | null;
   courier?: string | null;
   trackingNumber?: string | null;
-  items: { productTitle: string; variantTitle: string; quantity: number; price: number }[];
+  items: {
+    productTitle: string;
+    variantTitle: string;
+    quantity: number;
+    price: number;
+    imageUrl?: string | null;
+  }[];
   shippingAddress: {
     name: string;
     phone: string;
@@ -177,16 +183,24 @@ function brandShell(opts: {
 
 function itemsTable(order: MailOrder) {
   const rows = order.items
-    .map(
-      (i) => `
+    .map((i) => {
+      const thumb = i.imageUrl
+        ? `<td style="padding:14px 0;border-bottom:1px solid ${LINE};width:72px;vertical-align:top;">
+             <img src="${esc(i.imageUrl)}" width="64" height="64" alt="" style="display:block;width:64px;height:64px;object-fit:cover;border-radius:14px;border:1px solid ${LINE};background:${PAPER};" />
+           </td>`
+        : `<td style="padding:14px 0;border-bottom:1px solid ${LINE};width:72px;vertical-align:top;">
+             <div style="width:64px;height:64px;border-radius:14px;background:${PAPER};border:1px solid ${LINE};"></div>
+           </td>`;
+      return `
       <tr>
-        <td style="padding:14px 0;border-bottom:1px solid ${LINE};vertical-align:top;">
+        ${thumb}
+        <td style="padding:14px 12px 14px 0;border-bottom:1px solid ${LINE};vertical-align:middle;">
           <div style="font-weight:700;font-size:15px;color:${INK};">${esc(i.productTitle)}</div>
           <div style="margin-top:4px;font-size:13px;color:${ROAST};">${esc(i.variantTitle)} × ${i.quantity}</div>
         </td>
-        <td style="padding:14px 0;border-bottom:1px solid ${LINE};text-align:right;vertical-align:top;white-space:nowrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-weight:700;color:${INK};">${formatINR(i.price * i.quantity)}</td>
-      </tr>`,
-    )
+        <td style="padding:14px 0;border-bottom:1px solid ${LINE};text-align:right;vertical-align:middle;white-space:nowrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-weight:700;color:${INK};">${formatINR(i.price * i.quantity)}</td>
+      </tr>`;
+    })
     .join("");
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 4px;">${rows}</table>`;
 }

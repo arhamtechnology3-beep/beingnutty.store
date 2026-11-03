@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
+import { LineThumb } from "@/components/store/line-thumb";
 import { OrderProgress } from "@/components/store/order-progress";
 import { db } from "@/lib/db";
+import { visualsForOrderItems } from "@/lib/order-images";
 import { formatINR } from "@/lib/utils";
 import { ClearCart } from "./clear-cart";
 
@@ -22,6 +24,7 @@ export default async function OrderPage({ params, searchParams }: PageProps<"/or
 
   const address = order.shippingAddress as Address;
   const awaitingPayment = order.paymentMethod === "RAZORPAY" && order.paymentStatus !== "PAID";
+  const visuals = await visualsForOrderItems(order.items);
 
   return (
     <div className="mx-auto max-w-3xl px-5 pb-24 pt-32 md:pt-40">
@@ -49,17 +52,27 @@ export default async function OrderPage({ params, searchParams }: PageProps<"/or
 
       <div className="mt-6 rounded-[2rem] bg-paper p-6 md:p-8">
         <ul className="divide-y divide-line">
-          {order.items.map((item) => (
-            <li key={item.id} className="flex justify-between gap-4 py-4">
-              <span>
-                <span className="block font-semibold">{item.productTitle}</span>
-                <span className="text-sm text-roast">
-                  {item.variantTitle} × {item.quantity}
-                </span>
-              </span>
-              <span className="font-semibold tabular-nums">{formatINR(item.price * item.quantity)}</span>
-            </li>
-          ))}
+          {order.items.map((item) => {
+            const visual = item.variantId ? visuals.get(item.variantId) : undefined;
+            return (
+              <li key={item.id} className="flex items-center justify-between gap-4 py-4">
+                <div className="flex min-w-0 items-center gap-3">
+                  <LineThumb
+                    image={visual?.image}
+                    accentColor={visual?.accentColor ?? "#d08a3c"}
+                    className="size-16 md:size-20"
+                  />
+                  <span className="min-w-0">
+                    <span className="block font-semibold">{item.productTitle}</span>
+                    <span className="text-sm text-roast">
+                      {item.variantTitle} × {item.quantity}
+                    </span>
+                  </span>
+                </div>
+                <span className="shrink-0 font-semibold tabular-nums">{formatINR(item.price * item.quantity)}</span>
+              </li>
+            );
+          })}
         </ul>
         <dl className="mt-4 space-y-2 border-t border-line pt-4">
           <div className="flex justify-between">
