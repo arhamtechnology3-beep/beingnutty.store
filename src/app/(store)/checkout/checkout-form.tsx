@@ -189,8 +189,8 @@ export function CheckoutForm({
               <input name="line1" required autoComplete="address-line1" defaultValue={defaults?.line1} className={field} />
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-sm font-medium">Area, landmark (optional)</span>
-              <input name="line2" autoComplete="address-line2" defaultValue={defaults?.line2} className={field} />
+              <span className="mb-1.5 block text-sm font-medium">Area, landmark or Google Maps link (optional)</span>
+              <input name="line2" autoComplete="address-line2" maxLength={500} defaultValue={defaults?.line2} className={field} />
             </label>
             <div className="grid gap-4 sm:grid-cols-3">
               <label className="block">
