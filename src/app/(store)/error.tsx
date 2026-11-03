@@ -3,7 +3,14 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
 
-export default function StoreError({ retry }: { error: Error & { digest?: string }; retry: () => void }) {
+export default function StoreError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  console.error("[store-error]", error?.message, error?.digest);
   return (
     <div className="mx-auto grid min-h-[70dvh] max-w-xl place-items-center px-5 pt-28 text-center">
       <div>
@@ -14,7 +21,7 @@ export default function StoreError({ retry }: { error: Error & { digest?: string
           Something went wrong loading this page. Please try again — your cart is safe.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <button type="button" onClick={() => retry()} className="rounded-full bg-ink px-6 py-3 font-semibold text-paper">
+          <button type="button" onClick={() => reset()} className="rounded-full bg-ink px-6 py-3 font-semibold text-paper">
             Try again
           </button>
           <Link href="/" className="rounded-full border border-ink/25 px-6 py-3 font-semibold">

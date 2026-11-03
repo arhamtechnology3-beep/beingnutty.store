@@ -1,8 +1,10 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { buildSafe } from "./build-safe";
 import { db } from "./db";
 import type { MiniProduct } from "./recommend";
+import { softDb } from "./soft-db";
 
 const productInclude = {
   images: { orderBy: { position: "asc" } },
@@ -10,44 +12,61 @@ const productInclude = {
   reviews: { where: { approved: true }, select: { rating: true } },
 } as const;
 
-export const getActiveProducts = cache(async () =>
-  buildSafe(
+const cachedActiveProducts = unstable_cache(
+  () =>
+    softDb(
+      () =>
+        db.product.findMany({
+          where: { status: "ACTIVE" },
+          include: productInclude,
+          orderBy: { createdAt: "asc" },
+        }),
+      [],
+    ),
+  ["catalog-active-products"],
+  { revalidate: 120, tags: ["products"] },
+);
+
+const cachedCollections = unstable_cache(
+  () => softDb(() => db.collection.findMany({ where: { published: true }, orderBy: { position: "asc" } }), []),
+  ["catalog-collections"],
+  { revalidate: 120, tags: ["collections"] },
+);
+
+export const getActiveProducts = cache(async () => buildSafe(() => cachedActiveProducts(), []));
+
+export const getProductBySlug = cache(async (slug: string) =>
+  softDb(
     () =>
-      db.product.findMany({
-        where: { status: "ACTIVE" },
-        include: productInclude,
-        orderBy: { createdAt: "asc" },
+      db.product.findFirst({
+        where: { slug, status: "ACTIVE" },
+        include: {
+          ...productInclude,
+          reviews: { where: { approved: true }, orderBy: { createdAt: "desc" } },
+          collections: { include: { collection: true } },
+        },
       }),
-    [],
+    null,
   ),
 );
 
-export const getProductBySlug = cache(async (slug: string) =>
-  db.product.findFirst({
-    where: { slug, status: "ACTIVE" },
-    include: {
-      ...productInclude,
-      reviews: { where: { approved: true }, orderBy: { createdAt: "desc" } },
-      collections: { include: { collection: true } },
-    },
-  }),
-);
-
-export const getCollections = cache(async () =>
-  buildSafe(() => db.collection.findMany({ where: { published: true }, orderBy: { position: "asc" } }), []),
-);
+export const getCollections = cache(async () => buildSafe(() => cachedCollections(), []));
 
 export const getCollectionBySlug = cache(async (slug: string) =>
-  db.collection.findFirst({
-    where: { slug, published: true },
-    include: {
-      products: {
-        where: { product: { status: "ACTIVE" } },
-        orderBy: { position: "asc" },
-        include: { product: { include: productInclude } },
-      },
-    },
-  }),
+  softDb(
+    () =>
+      db.collection.findFirst({
+        where: { slug, published: true },
+        include: {
+          products: {
+            where: { product: { status: "ACTIVE" } },
+            orderBy: { position: "asc" },
+            include: { product: { include: productInclude } },
+          },
+        },
+      }),
+    null,
+  ),
 );
 
 const LOW_STOCK = 10;

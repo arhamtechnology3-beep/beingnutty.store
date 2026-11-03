@@ -21,7 +21,7 @@ function connectionString() {
     throw new Error("DATABASE_URL is not set");
   }
   const u = new URL(url);
-  if (!u.searchParams.has("connection_limit")) u.searchParams.set("connection_limit", "1");
+  u.searchParams.set("connection_limit", "5");
   if (!u.searchParams.has("connect_timeout")) u.searchParams.set("connect_timeout", "15");
   for (const key of ["sslmode", "sslrootcert", "sslcert", "sslkey", "uselibpqcompat"]) {
     u.searchParams.delete(key);
@@ -34,7 +34,7 @@ function getPool() {
   const missing = !process.env.DATABASE_URL?.trim();
   const pool = new pg.Pool({
     connectionString: connectionString(),
-    max: 1,
+    max: 5,
     connectionTimeoutMillis: missing ? 500 : 15_000,
     // Required on Hostinger: encrypt without verifying the proxy/CA chain.
     ssl: missing ? false : { rejectUnauthorized: false },

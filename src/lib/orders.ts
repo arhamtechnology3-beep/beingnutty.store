@@ -1,9 +1,11 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { buildSafe } from "./build-safe";
 import { db } from "./db";
 import type { Prisma } from "@/generated/prisma/client";
 import { DEFAULT_REWARDS, rewardFor, type RewardTier } from "./rewards";
+import { softDb } from "./soft-db";
 
 export type LineInput = { variantId: string; quantity: number };
 
@@ -16,17 +18,24 @@ const DEFAULT_SHIPPING: ShippingSettings = {
   rewards: DEFAULT_REWARDS,
 };
 
+const cachedShippingSettings = unstable_cache(
+  () =>
+    softDb(async () => {
+      const row = await db.setting.findUnique({ where: { key: "shipping" } });
+      const value = (row?.value ?? {}) as Partial<ShippingSettings>;
+      return {
+        flatRate: value.flatRate ?? DEFAULT_SHIPPING.flatRate,
+        freeAbove: value.freeAbove ?? DEFAULT_SHIPPING.freeAbove,
+        codEnabled: value.codEnabled ?? DEFAULT_SHIPPING.codEnabled,
+        rewards: Array.isArray(value.rewards) ? value.rewards : DEFAULT_REWARDS,
+      };
+    }, DEFAULT_SHIPPING),
+  ["shipping-settings"],
+  { revalidate: 120, tags: ["shipping"] },
+);
+
 export const getShippingSettings = cache(async (): Promise<ShippingSettings> =>
-  buildSafe(async () => {
-    const row = await db.setting.findUnique({ where: { key: "shipping" } });
-    const value = (row?.value ?? {}) as Partial<ShippingSettings>;
-    return {
-      flatRate: value.flatRate ?? DEFAULT_SHIPPING.flatRate,
-      freeAbove: value.freeAbove ?? DEFAULT_SHIPPING.freeAbove,
-      codEnabled: value.codEnabled ?? DEFAULT_SHIPPING.codEnabled,
-      rewards: Array.isArray(value.rewards) ? value.rewards : DEFAULT_REWARDS,
-    };
-  }, DEFAULT_SHIPPING),
+  buildSafe(() => cachedShippingSettings(), DEFAULT_SHIPPING),
 );
 
 export type Quote = Awaited<ReturnType<typeof quoteCart>>;

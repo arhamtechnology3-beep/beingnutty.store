@@ -1,16 +1,17 @@
-import { CartDrawer } from "@/components/store/cart-drawer";
+import { CartDrawerLoader } from "@/components/store/cart-drawer-loader";
 import { FloatingActions } from "@/components/store/floating-actions";
 import { Footer } from "@/components/store/footer";
 import { Header } from "@/components/store/header";
 import { SmoothScroll } from "@/components/store/smooth-scroll";
-import { getCartCatalog } from "@/lib/cart-catalog";
+import { getShippingSettings } from "@/lib/orders";
+import { cartMilestones } from "@/lib/rewards";
 import { formatINR } from "@/lib/utils";
 
-// Store pages need the DB at request time; don't fail Hostinger builds when env isn't injected yet.
-export const dynamic = "force-dynamic";
+// Cache HTML for 2 minutes so Hostinger (Mumbai) ↔ Supabase (Sydney) isn't hit on every click.
+export const revalidate = 120;
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
-  const { shipping, ...catalog } = await getCartCatalog();
+  const shipping = await getShippingSettings();
   const topReward = shipping.rewards.at(-1);
   const announcements = [
     shipping.freeAbove ? `Free delivery on orders above ${formatINR(shipping.freeAbove)}` : "Delivered across India",
@@ -31,7 +32,11 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       <Header announcements={announcements} />
       <main id="main">{children}</main>
       <Footer />
-      <CartDrawer {...catalog} />
+      <CartDrawerLoader
+        milestones={cartMilestones(shipping.freeAbove, shipping.rewards)}
+        rewards={shipping.rewards}
+        codEnabled={shipping.codEnabled}
+      />
       <FloatingActions />
     </>
   );
