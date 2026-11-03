@@ -7,11 +7,17 @@ export function isProductionBuild() {
   );
 }
 
+/** Prefer skipping the DB entirely during build when Hostinger hasn't injected secrets yet. */
+export function dbAvailable() {
+  return Boolean(process.env.DATABASE_URL?.trim());
+}
+
 /**
- * Runs `fn`, or returns `fallback` when the DB is unreachable during a production build
- * (Hostinger often can't open a Supabase socket while compiling).
+ * Runs `fn`, or returns `fallback` when the DB is missing/unreachable during a production build
+ * (Hostinger often omits env at compile time, or can't open a Supabase socket).
  */
 export async function buildSafe<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+  if (isProductionBuild() && !dbAvailable()) return fallback;
   try {
     return await fn();
   } catch (error) {

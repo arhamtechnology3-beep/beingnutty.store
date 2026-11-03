@@ -6,6 +6,9 @@ import { SmoothScroll } from "@/components/store/smooth-scroll";
 import { getCartCatalog } from "@/lib/cart-catalog";
 import { formatINR } from "@/lib/utils";
 
+// Store pages need the DB at request time; don't fail Hostinger builds when env isn't injected yet.
+export const dynamic = "force-dynamic";
+
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
   const { shipping, ...catalog } = await getCartCatalog();
   const topReward = shipping.rewards.at(-1);

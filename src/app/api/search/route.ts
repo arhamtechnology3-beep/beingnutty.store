@@ -1,5 +1,7 @@
 import { searchProducts, shortTitle } from "@/lib/catalog";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   const q = new URL(request.url).searchParams.get("q")?.trim().slice(0, 80) ?? "";
   const products = q ? await searchProducts(q, 6) : [];

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/store/breadcrumbs";
+import { buildSafe } from "@/lib/build-safe";
 import { db } from "@/lib/db";
 import { JsonLd } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
@@ -18,11 +19,15 @@ export const metadata: Metadata = {
 const TONES = ["#e9c987", "#c8945a", "#9db24e", "#d08a3c", "#5a2618"];
 
 export default async function CollectionsIndexPage() {
-  const collections = await db.collection.findMany({
-    where: { published: true },
-    orderBy: { position: "asc" },
-    include: { _count: { select: { products: { where: { product: { status: "ACTIVE" } } } } } },
-  });
+  const collections = await buildSafe(
+    () =>
+      db.collection.findMany({
+        where: { published: true },
+        orderBy: { position: "asc" },
+        include: { _count: { select: { products: { where: { product: { status: "ACTIVE" } } } } } },
+      }),
+    [],
+  );
 
   return (
     <>
