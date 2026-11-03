@@ -73,9 +73,9 @@ export function CartDrawer({ products, milestones, rewards, codEnabled }: CartCa
                   </span>
                   <p className="mt-4 font-display text-3xl font-bold">Nothing nutty here yet.</p>
                   <p className="mt-2 text-roast">Start with a bestseller — one tap adds it.</p>
-                  <Link href="/collections/dry-fruits" onClick={close} className="mt-6 inline-block rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper">
+                  <a href="/collections/dry-fruits" onClick={close} className="mt-6 inline-block rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper">
                     Shop all dry fruits
-                  </Link>
+                  </a>
                 </div>
                 <div className="mt-10">
                   <PairsWell products={products} lines={lines} title="Bestsellers" onNavigate={close} />

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, type ComponentType, type SVGProps } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -147,13 +146,13 @@ export function NutStory() {
                 <h3 className="mt-2 font-display text-[clamp(3.6rem,14vw,12rem)] font-black leading-[0.85] tracking-tight md:mt-3">{c.name}</h3>
                 <p className="mt-4 max-w-md text-lg leading-relaxed max-md:[@media(max-height:700px)]:mt-3 max-md:[@media(max-height:700px)]:text-base md:mt-6 md:text-xl">{c.copy}</p>
                 <p className="mt-3 text-sm font-medium opacity-75 max-md:[@media(max-height:700px)]:hidden md:mt-4">{c.sizes}</p>
-                <Link
+                <a
                   href={c.href}
                   className="mt-5 inline-flex items-center gap-2 rounded-full border border-current px-5 py-2.5 font-semibold transition-colors hover:bg-current/10 md:mt-8 md:px-6 md:py-3"
                 >
                   Shop {c.name}
                   <ArrowUpRight className="size-4" />
-                </Link>
+                </a>
               </div>
               <div className="relative z-10 mx-auto w-[min(46vw,27svh,220px)] max-md:[@media(max-height:700px)]:w-[22svh] md:mx-0 md:ml-auto md:mr-[8vw] md:w-[min(60vw,280px)]">
                 <c.Icon className="absolute -left-12 -top-6 w-16 animate-[bob_7s_ease-in-out_infinite] md:-left-16 md:-top-10 md:w-32" aria-hidden />

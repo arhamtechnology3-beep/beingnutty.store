@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { Check, Flame, Plus, Star } from "lucide-react";
 import type { CardProduct } from "@/lib/catalog";
 import { cart } from "@/lib/cart-store";
 import { bulkSaving } from "@/lib/recommend";
+import { HardLink } from "./hard-link";
 import { ProductStage } from "./product-stage";
 import { WishlistButton } from "./wishlist-button";
 import { cn, formatINR, savePercent } from "@/lib/utils";
@@ -48,7 +48,7 @@ export function ProductCard({
   return (
     <article className="group relative flex h-full flex-col rounded-[1.75rem] bg-paper p-1.5 ring-1 ring-line transition duration-500 ease-out-expo hover:-translate-y-1 hover:shadow-[0_28px_50px_-28px_rgba(42,26,16,0.45)] hover:ring-ink/15 sm:p-2">
       <div className="relative">
-        <Link
+        <HardLink
           href={href}
           aria-label={product.title}
           className="block overflow-hidden rounded-[1.4rem]"
@@ -63,7 +63,7 @@ export function ProductCard({
             preload={priority}
             className="aspect-[4/5]"
           />
-        </Link>
+        </HardLink>
         <div className="pointer-events-none absolute left-2 top-2 flex max-w-[calc(100%-3.5rem)] flex-wrap gap-1 sm:left-3 sm:top-3">
           {save ? (
             <span
@@ -111,9 +111,9 @@ export function ProductCard({
 
       <div className="flex flex-1 flex-col px-1.5 pb-1.5 pt-3 sm:px-2.5 sm:pb-2">
         <h3 className="font-display text-lg font-bold leading-tight sm:text-xl">
-          <Link href={href} className="line-clamp-1 hover:text-roast">
+          <HardLink href={href} className="line-clamp-1 hover:text-roast">
             {name}
-          </Link>
+          </HardLink>
         </h3>
         <p className="mt-0.5 line-clamp-1 text-[13px] text-roast sm:text-sm">
           {subtitle}

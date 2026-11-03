@@ -62,9 +62,9 @@ export function Footer() {
                 <ul className="mt-4 space-y-2.5">
                   {col.links.map((l) => (
                     <li key={l.href}>
-                      <Link href={l.href} className="text-paper/85 transition-colors hover:text-caramel">
+                      <a href={l.href} className="text-paper/85 transition-colors hover:text-caramel">
                         {l.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>

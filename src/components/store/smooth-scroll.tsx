@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,11 +11,13 @@ gsap.registerPlugin(ScrollTrigger);
 let instance: Lenis | null = null;
 
 export function scrollToTop() {
-  if (instance) instance.scrollTo(0);
+  if (instance) instance.scrollTo(0, { immediate: true });
   else window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 export function SmoothScroll() {
+  const pathname = usePathname();
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -31,6 +34,14 @@ export function SmoothScroll() {
       instance = null;
     };
   }, []);
+
+  // Kill leftover ScrollTrigger pins (hero etc.) and jump to top on every route change.
+  useEffect(() => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    ScrollTrigger.clearScrollMemory?.();
+    if (instance) instance.scrollTo(0, { immediate: true });
+    else window.scrollTo(0, 0);
+  }, [pathname]);
 
   return null;
 }

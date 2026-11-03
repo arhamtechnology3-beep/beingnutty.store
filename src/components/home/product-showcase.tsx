@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import type { CardProduct } from "@/lib/catalog";
@@ -69,9 +68,9 @@ export function ProductShowcase({ products }: { products: CardProduct[] }) {
       </motion.ul>
 
       <div className="mt-16 text-center">
-        <Link href="/collections/dry-fruits" className="inline-block rounded-full bg-ink px-8 py-4 font-semibold text-paper transition-colors hover:bg-roast">
+        <a href="/collections/dry-fruits" className="inline-block rounded-full bg-ink px-8 py-4 font-semibold text-paper transition-colors hover:bg-roast">
           View all products
-        </Link>
+        </a>
       </div>
     </section>
   );

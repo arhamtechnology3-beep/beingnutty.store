@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState, type ComponentType, type SVGProps } from "react";
+import { HardLink } from "@/components/store/hard-link";
 import {
   animate,
   AnimatePresence,
@@ -270,7 +270,7 @@ export function Hero({ cans: list }: { cans: HeroCan[] }) {
           animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ delay: 0.9, duration: 1, ease }}
         >
-          <Link
+          <HardLink
             href={`/products/${current.slug}`}
             className="group inline-flex max-w-full items-center gap-2 whitespace-nowrap rounded-full bg-paper/80 py-1.5 pl-1.5 pr-4 text-sm font-semibold shadow-[0_8px_24px_-14px_rgba(42,26,16,0.5)] ring-1 ring-line backdrop-blur transition-colors hover:bg-paper"
             aria-live="polite"
@@ -286,7 +286,7 @@ export function Hero({ cans: list }: { cans: HeroCan[] }) {
             <span className="truncate">{current.name}</span>
             <span className="shrink-0 text-roast">· from {formatINR(current.from)}</span>
             <ArrowUpRight className="size-4 shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-          </Link>
+          </HardLink>
           {cans.length > 1 ? (
             <div className="flex items-center gap-1.5 lg:pl-2" role="group" aria-label="Choose a can">
               {cans.map((c, i) => (
@@ -322,13 +322,13 @@ export function Hero({ cans: list }: { cans: HeroCan[] }) {
           Premium kaju, badam, pista and nut mixes — raw or smoked, packed in cans and delivered across India.
         </p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
-          <Link
+          <HardLink
             href="/collections/dry-fruits"
             className="group inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 font-semibold text-paper transition-colors hover:bg-roast"
           >
             Shop the range
             <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-          </Link>
+          </HardLink>
           <a href="#nut-story" className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-7 py-4 font-semibold transition-colors hover:bg-ink/5">
             What&apos;s inside
           </a>

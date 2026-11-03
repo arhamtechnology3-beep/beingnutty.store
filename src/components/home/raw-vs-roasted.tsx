@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -71,12 +70,12 @@ export function RawVsRoasted() {
               <div>
                 <p className="font-display text-[clamp(4rem,12vw,11rem)] font-black italic leading-[0.85] tracking-tight">{side.title}</p>
                 <p className="mt-6 max-w-md text-xl leading-relaxed opacity-85">{side.copy}</p>
-                <Link
+                <a
                   href={side.href}
                   className="mt-8 inline-block rounded-full border border-current px-6 py-3 font-semibold transition-colors hover:bg-current/10"
                 >
                   {side.cta}
-                </Link>
+                </a>
               </div>
               <div data-can className="mx-auto w-[min(55vw,260px)]">
                 <CanPhoto slug={side.photo} />

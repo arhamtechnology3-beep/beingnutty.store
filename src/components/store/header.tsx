@@ -21,6 +21,7 @@ import {
 import { cart, cartTotals, useCartLines } from "@/lib/cart-store";
 import { useWishlist } from "@/lib/local-store";
 import { cn } from "@/lib/utils";
+import { HardLink } from "./hard-link";
 import { SearchOverlay } from "./search-overlay";
 
 const NAV = [
@@ -91,7 +92,7 @@ export function Header({ announcements }: { announcements: string[] }) {
 
         <nav aria-label="Main" className="hidden items-center gap-8 whitespace-nowrap lg:flex">
           {NAV.map((item) => (
-            <Link
+            <HardLink
               key={item.href}
               href={item.href}
               className={cn(
@@ -100,7 +101,7 @@ export function Header({ announcements }: { announcements: string[] }) {
               )}
             >
               {item.label}
-            </Link>
+            </HardLink>
           ))}
         </nav>
 
@@ -151,14 +152,14 @@ export function Header({ announcements }: { announcements: string[] }) {
       {menuOpen ? (
         <nav aria-label="Mobile" className="border-t border-line px-5 pb-8 pt-4 lg:hidden">
           {NAV.map((item) => (
-            <Link
+            <HardLink
               key={item.href}
               href={item.href}
               onClick={() => setMenuOpen(false)}
               className="block py-3 font-display text-3xl font-bold"
             >
               {item.label}
-            </Link>
+            </HardLink>
           ))}
           <Link href="/wishlist" onClick={() => setMenuOpen(false)} className="mt-4 block border-t border-line pt-5 text-lg font-semibold">
             Wishlist{saved ? ` (${saved})` : ""}

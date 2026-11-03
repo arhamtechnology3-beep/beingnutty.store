@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Almond, Cashew, Pistachio } from "@/components/visuals/nuts";
 
@@ -13,13 +12,13 @@ export function ClosingCta() {
         Stay nutty.
       </h2>
       <p className="relative mx-auto mt-6 max-w-md text-xl">Your next can of kaju, badam or pista is a few taps away.</p>
-      <Link
+      <a
         href="/collections/dry-fruits"
         className="group relative mt-10 inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 font-semibold text-paper transition-transform hover:scale-105"
       >
         Shop now
         <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-      </Link>
+      </a>
     </section>
   );
 }
