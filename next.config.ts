@@ -1,10 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Hostinger (and some other hosts) block Turbopack's PostCSS child-process sockets.
-  // Production builds use `next build --webpack`; this keeps local `next dev` working.
+  // Hostinger: Turbopack PostCSS sockets are blocked, and shared hosting can't spawn ~58
+  // page-data workers ("Resource temporarily unavailable"). Build with webpack + 1 CPU.
   experimental: {
     turbopackPluginRuntimeStrategy: "workerThreads",
+    cpus: 1,
+    workerThreads: false,
+    staticGenerationMaxConcurrency: 1,
+    staticGenerationMinPagesPerWorker: 50,
   },
   turbopack: {
     root: process.cwd(),
