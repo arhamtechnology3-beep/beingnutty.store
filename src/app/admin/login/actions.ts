@@ -16,7 +16,15 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
   if (!admin || !ok) return { error: "Incorrect email or password." };
 
   await db.adminUser.update({ where: { id: admin.id }, data: { lastLoginAt: new Date() } });
-  await createSession(admin.id);
+  try {
+    await createSession(admin.id);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Could not start a login session.";
+    if (/AUTH_SECRET/i.test(message)) {
+      return { error: "Server misconfigured: add AUTH_SECRET (32+ characters) in Hostinger Environment variables, then restart the app." };
+    }
+    return { error: message };
+  }
   redirect("/admin");
 }
 

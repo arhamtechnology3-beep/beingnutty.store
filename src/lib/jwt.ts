@@ -5,8 +5,12 @@ import { jwtVerify, SignJWT } from "jose";
 export type Audience = "admin" | "customer";
 
 function secret() {
-  const value = process.env.AUTH_SECRET;
-  if (!value || value.length < 32) throw new Error("AUTH_SECRET must be set (32+ characters)");
+  const value = process.env.AUTH_SECRET?.trim();
+  if (!value || value.length < 32) {
+    throw new Error(
+      "AUTH_SECRET must be set in Hostinger Environment variables (32+ characters). Generate one with: openssl rand -base64 32",
+    );
+  }
   return new TextEncoder().encode(value);
 }
 
