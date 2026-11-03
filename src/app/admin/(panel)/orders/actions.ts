@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { addOrderEvent } from "@/lib/order-events";
+import { afterOrderShipped } from "@/lib/order-notify";
 
 const schema = z.object({
   status: z.enum(["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED", "REFUNDED"]),
@@ -36,13 +37,20 @@ export async function updateOrder(orderId: string, formData: FormData) {
       to: data.paymentStatus,
     });
   }
-  if (trackingNumber && trackingNumber !== before.trackingNumber) {
+
+  const trackingAdded = Boolean(trackingNumber && trackingNumber !== before.trackingNumber);
+  if (trackingAdded) {
     await addOrderEvent(
       orderId,
       "TRACKING_ADDED",
       courier ? `Tracking added via ${courier}: ${trackingNumber}` : `Tracking added: ${trackingNumber}`,
       { courier, trackingNumber },
     );
+  }
+
+  const newlyShipped = data.status === "SHIPPED" && before.status !== "SHIPPED";
+  if (newlyShipped || trackingAdded) {
+    await afterOrderShipped(orderId);
   }
 
   revalidatePath(`/admin/orders/${orderId}`);
