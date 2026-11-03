@@ -20,6 +20,10 @@
 # production
 /build
 
+# raw brand photo/video dumps (large; optimised copies live in public/)
+/Photos-*/
+/.media-previews/
+
 # misc
 .DS_Store
 *.pem
@@ -32,6 +36,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel

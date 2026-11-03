@@ -1,26 +1,183 @@
 @import "tailwindcss";
 
+/* Brand tokens — placeholder palette until final brand assets arrive. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cream: #f6efe2;
+  --paper: #fbf7ef;
+  --ink: #2a1a10;
+  --roast: #6b3e1f;
+  --caramel: #d08a3c;
+  --pista: #9db24e;
+  --date: #5a2618;
+  --line: color-mix(in oklab, var(--ink) 14%, transparent);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: var(--cream);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-roast: var(--roast);
+  --color-caramel: var(--caramel);
+  --color-pista: var(--pista);
+  --color-date: var(--date);
+  --color-line: var(--line);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-instrument);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--cream);
+  color: var(--ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--caramel);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--caramel);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@utility font-display {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+}
+
+/* Film grain overlay for warm, tactile surfaces. */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+  }
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--stroke, var(--ink));
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(6deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* Room for the sticky add-to-cart bar so it never covers the footer. */
+html[data-sticky-bar] body {
+  padding-bottom: 7.5rem;
+}
+@media (min-width: 48rem) {
+  html[data-sticky-bar] body {
+    padding-bottom: 5.5rem;
+  }
+}
+
+/* A light sweep across call-to-action buttons every few seconds. */
+@utility btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 25%, rgb(255 255 255 / 0.38) 50%, transparent 75%);
+    transform: translateX(-130%);
+    animation: shine 3.4s ease-in-out infinite;
+  }
+}
+
+@keyframes shine {
+  0%,
+  60% {
+    transform: translateX(-130%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+/* Soft caramel pulse ring to draw the eye to the sticky add-to-cart. */
+@keyframes attention {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--caramel) 70%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 14px transparent;
+  }
+}
+
+/* Intro loader is skipped once seen this session (class set by an inline script). */
+html.intro-seen [data-intro] {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-intro] {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
