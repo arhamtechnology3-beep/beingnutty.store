@@ -1,5 +1,5 @@
 import "server-only";
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 import { site } from "./site";
 import { formatINR } from "./utils";
 
@@ -40,7 +40,7 @@ function fromAddress() {
   return process.env.EMAIL_FROM!.trim();
 }
 
-let transporter: nodemailer.Transporter | null = null;
+let transporter: Transporter | null = null;
 
 function getTransporter() {
   if (transporter) return transporter;
