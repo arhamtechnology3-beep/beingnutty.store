@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { buildSafe } from "./build-safe";
 import { db } from "./db";
 import type { MiniProduct } from "./recommend";
 
@@ -10,11 +11,15 @@ const productInclude = {
 } as const;
 
 export const getActiveProducts = cache(async () =>
-  db.product.findMany({
-    where: { status: "ACTIVE" },
-    include: productInclude,
-    orderBy: { createdAt: "asc" },
-  }),
+  buildSafe(
+    () =>
+      db.product.findMany({
+        where: { status: "ACTIVE" },
+        include: productInclude,
+        orderBy: { createdAt: "asc" },
+      }),
+    [],
+  ),
 );
 
 export const getProductBySlug = cache(async (slug: string) =>
@@ -29,7 +34,7 @@ export const getProductBySlug = cache(async (slug: string) =>
 );
 
 export const getCollections = cache(async () =>
-  db.collection.findMany({ where: { published: true }, orderBy: { position: "asc" } }),
+  buildSafe(() => db.collection.findMany({ where: { published: true }, orderBy: { position: "asc" } }), []),
 );
 
 export const getCollectionBySlug = cache(async (slug: string) =>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/store/breadcrumbs";
 import { RichText } from "@/components/store/rich-text";
 import { getPostBySlug, getPublishedPosts, readingMinutes } from "@/lib/blog";
+import { buildSafe } from "@/lib/build-safe";
 import { JsonLd } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
 import { redirectOrNotFound } from "@/lib/redirects";
@@ -11,7 +12,7 @@ import { redirectOrNotFound } from "@/lib/redirects";
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  const posts = await getPublishedPosts();
+  const posts = await buildSafe(() => getPublishedPosts(), []);
   return posts.map((p) => ({ slug: p.slug }));
 }
 

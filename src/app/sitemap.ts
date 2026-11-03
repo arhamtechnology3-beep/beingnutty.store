@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { buildSafe } from "@/lib/build-safe";
 import { db } from "@/lib/db";
 import { absoluteUrl } from "@/lib/site";
 
@@ -7,15 +8,19 @@ export const revalidate = 3600;
 const toAbsolute = (url: string) => (url.startsWith("/") ? absoluteUrl(url) : url);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, collections, pages, posts] = await Promise.all([
-    db.product.findMany({
-      where: { status: "ACTIVE" },
-      select: { slug: true, updatedAt: true, images: { select: { url: true }, orderBy: { position: "asc" } } },
-    }),
-    db.collection.findMany({ where: { published: true }, select: { slug: true, updatedAt: true, image: true } }),
-    db.page.findMany({ where: { published: true }, select: { slug: true, updatedAt: true } }),
-    db.blogPost.findMany({ where: { publishedAt: { lte: new Date() } }, select: { slug: true, updatedAt: true } }),
-  ]);
+  const empty = { products: [] as never[], collections: [] as never[], pages: [] as never[], posts: [] as never[] };
+  const { products, collections, pages, posts } = await buildSafe(async () => {
+    const [products, collections, pages, posts] = await Promise.all([
+      db.product.findMany({
+        where: { status: "ACTIVE" },
+        select: { slug: true, updatedAt: true, images: { select: { url: true }, orderBy: { position: "asc" } } },
+      }),
+      db.collection.findMany({ where: { published: true }, select: { slug: true, updatedAt: true, image: true } }),
+      db.page.findMany({ where: { published: true }, select: { slug: true, updatedAt: true } }),
+      db.blogPost.findMany({ where: { publishedAt: { lte: new Date() } }, select: { slug: true, updatedAt: true } }),
+    ]);
+    return { products, collections, pages, posts };
+  }, empty);
 
   return [
     { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1, images: [absoluteUrl("/images/lifestyle/range-trio.jpg")] },

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/store/breadcrumbs";
 import { FaqSection } from "@/components/store/faq-section";
 import { ProductGrid } from "@/components/store/product-grid";
+import { buildSafe } from "@/lib/build-safe";
 import {
   getCollectionBySlug,
   getCollections,
@@ -18,7 +19,7 @@ import { redirectOrNotFound } from "@/lib/redirects";
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  const collections = await getCollections();
+  const collections = await buildSafe(() => getCollections(), []);
   return collections.map((c) => ({ slug: c.slug }));
 }
 

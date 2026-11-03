@@ -1,11 +1,12 @@
 import "server-only";
 import { cache } from "react";
+import { buildSafe } from "./build-safe";
 import { db } from "./db";
 
 const published = () => ({ publishedAt: { not: null, lte: new Date() } });
 
 export const getPublishedPosts = cache(async () =>
-  db.blogPost.findMany({ where: published(), orderBy: { publishedAt: "desc" } }),
+  buildSafe(() => db.blogPost.findMany({ where: published(), orderBy: { publishedAt: "desc" } }), []),
 );
 
 export const getPostBySlug = cache(async (slug: string) => db.blogPost.findFirst({ where: { slug, ...published() } }));

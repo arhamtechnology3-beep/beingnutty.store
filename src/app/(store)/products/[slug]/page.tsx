@@ -15,6 +15,7 @@ import { ProductReviews, Stars } from "@/components/store/reviews";
 import { TrustBadges } from "@/components/store/trust-badges";
 import { Can } from "@/components/visuals/can";
 import { APLUS, aplusFacts } from "@/lib/aplus";
+import { buildSafe } from "@/lib/build-safe";
 import { getActiveProducts, getProductBySlug, shortTitle, toCardProduct, toMiniProduct } from "@/lib/catalog";
 import { recommend } from "@/lib/recommend";
 import { cartMilestones } from "@/lib/rewards";
@@ -64,7 +65,7 @@ type Faq = { q: string; a: string };
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  const products = await getActiveProducts();
+  const products = await buildSafe(() => getActiveProducts(), []);
   return products.map((p) => ({ slug: p.slug }));
 }
 

@@ -3,6 +3,7 @@ import { cache } from "react";
 import { Breadcrumbs } from "@/components/store/breadcrumbs";
 import { ContactForm } from "@/components/store/contact-form";
 import { RichText } from "@/components/store/rich-text";
+import { buildSafe } from "@/lib/build-safe";
 import { db } from "@/lib/db";
 import { redirectOrNotFound } from "@/lib/redirects";
 
@@ -11,8 +12,10 @@ export const revalidate = 300;
 const getPage = cache((slug: string) => db.page.findFirst({ where: { slug, published: true } }));
 
 export async function generateStaticParams() {
-  const pages = await db.page.findMany({ where: { published: true }, select: { slug: true } });
-  return pages;
+  return buildSafe(
+    () => db.page.findMany({ where: { published: true }, select: { slug: true } }),
+    [],
+  );
 }
 
 export async function generateMetadata({ params }: PageProps<"/pages/[slug]">): Promise<Metadata> {
