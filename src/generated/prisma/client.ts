@@ -112,6 +112,11 @@ export type Discount = Prisma.DiscountModel
  */
 export type Order = Prisma.OrderModel
 /**
+ * Model OrderEvent
+ * * Timeline of what happened on an order (placed, paid, emailed, shipped…).
+ */
+export type OrderEvent = Prisma.OrderEventModel
+/**
  * Model OrderItem
  * 
  */

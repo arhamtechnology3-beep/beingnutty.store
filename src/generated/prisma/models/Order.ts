@@ -65,6 +65,14 @@ export type OrderMinAggregateOutputType = {
   razorpayPaymentId: string | null
   courier: string | null
   trackingNumber: string | null
+  sourceChannel: string | null
+  utmSource: string | null
+  utmMedium: string | null
+  utmCampaign: string | null
+  utmContent: string | null
+  utmTerm: string | null
+  referrer: string | null
+  landingPage: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -90,6 +98,14 @@ export type OrderMaxAggregateOutputType = {
   razorpayPaymentId: string | null
   courier: string | null
   trackingNumber: string | null
+  sourceChannel: string | null
+  utmSource: string | null
+  utmMedium: string | null
+  utmCampaign: string | null
+  utmContent: string | null
+  utmTerm: string | null
+  referrer: string | null
+  landingPage: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -116,6 +132,15 @@ export type OrderCountAggregateOutputType = {
   razorpayPaymentId: number
   courier: number
   trackingNumber: number
+  sourceChannel: number
+  utmSource: number
+  utmMedium: number
+  utmCampaign: number
+  utmContent: number
+  utmTerm: number
+  referrer: number
+  landingPage: number
+  journey: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -161,6 +186,14 @@ export type OrderMinAggregateInputType = {
   razorpayPaymentId?: true
   courier?: true
   trackingNumber?: true
+  sourceChannel?: true
+  utmSource?: true
+  utmMedium?: true
+  utmCampaign?: true
+  utmContent?: true
+  utmTerm?: true
+  referrer?: true
+  landingPage?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -186,6 +219,14 @@ export type OrderMaxAggregateInputType = {
   razorpayPaymentId?: true
   courier?: true
   trackingNumber?: true
+  sourceChannel?: true
+  utmSource?: true
+  utmMedium?: true
+  utmCampaign?: true
+  utmContent?: true
+  utmTerm?: true
+  referrer?: true
+  landingPage?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -212,6 +253,15 @@ export type OrderCountAggregateInputType = {
   razorpayPaymentId?: true
   courier?: true
   trackingNumber?: true
+  sourceChannel?: true
+  utmSource?: true
+  utmMedium?: true
+  utmCampaign?: true
+  utmContent?: true
+  utmTerm?: true
+  referrer?: true
+  landingPage?: true
+  journey?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -325,6 +375,15 @@ export type OrderGroupByOutputType = {
   razorpayPaymentId: string | null
   courier: string | null
   trackingNumber: string | null
+  sourceChannel: string | null
+  utmSource: string | null
+  utmMedium: string | null
+  utmCampaign: string | null
+  utmContent: string | null
+  utmTerm: string | null
+  referrer: string | null
+  landingPage: string | null
+  journey: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: OrderCountAggregateOutputType | null
@@ -374,10 +433,20 @@ export type OrderWhereInput = {
   razorpayPaymentId?: Prisma.StringNullableFilter<"Order"> | string | null
   courier?: Prisma.StringNullableFilter<"Order"> | string | null
   trackingNumber?: Prisma.StringNullableFilter<"Order"> | string | null
+  sourceChannel?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmSource?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmMedium?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmCampaign?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmContent?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmTerm?: Prisma.StringNullableFilter<"Order"> | string | null
+  referrer?: Prisma.StringNullableFilter<"Order"> | string | null
+  landingPage?: Prisma.StringNullableFilter<"Order"> | string | null
+  journey?: Prisma.JsonNullableFilter<"Order">
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
+  events?: Prisma.OrderEventListRelationFilter
 }
 
 export type OrderOrderByWithRelationInput = {
@@ -402,10 +471,20 @@ export type OrderOrderByWithRelationInput = {
   razorpayPaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   courier?: Prisma.SortOrderInput | Prisma.SortOrder
   trackingNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceChannel?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmSource?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmMedium?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmCampaign?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmContent?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmTerm?: Prisma.SortOrderInput | Prisma.SortOrder
+  referrer?: Prisma.SortOrderInput | Prisma.SortOrder
+  landingPage?: Prisma.SortOrderInput | Prisma.SortOrder
+  journey?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   customer?: Prisma.CustomerOrderByWithRelationInput
   items?: Prisma.OrderItemOrderByRelationAggregateInput
+  events?: Prisma.OrderEventOrderByRelationAggregateInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -433,10 +512,20 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   razorpayPaymentId?: Prisma.StringNullableFilter<"Order"> | string | null
   courier?: Prisma.StringNullableFilter<"Order"> | string | null
   trackingNumber?: Prisma.StringNullableFilter<"Order"> | string | null
+  sourceChannel?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmSource?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmMedium?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmCampaign?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmContent?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmTerm?: Prisma.StringNullableFilter<"Order"> | string | null
+  referrer?: Prisma.StringNullableFilter<"Order"> | string | null
+  landingPage?: Prisma.StringNullableFilter<"Order"> | string | null
+  journey?: Prisma.JsonNullableFilter<"Order">
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
+  events?: Prisma.OrderEventListRelationFilter
 }, "id" | "number" | "razorpayOrderId">
 
 export type OrderOrderByWithAggregationInput = {
@@ -461,6 +550,15 @@ export type OrderOrderByWithAggregationInput = {
   razorpayPaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   courier?: Prisma.SortOrderInput | Prisma.SortOrder
   trackingNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceChannel?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmSource?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmMedium?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmCampaign?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmContent?: Prisma.SortOrderInput | Prisma.SortOrder
+  utmTerm?: Prisma.SortOrderInput | Prisma.SortOrder
+  referrer?: Prisma.SortOrderInput | Prisma.SortOrder
+  landingPage?: Prisma.SortOrderInput | Prisma.SortOrder
+  journey?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
@@ -495,6 +593,15 @@ export type OrderScalarWhereWithAggregatesInput = {
   razorpayPaymentId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   courier?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   trackingNumber?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  sourceChannel?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  utmSource?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  utmMedium?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  utmCampaign?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  utmContent?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  utmTerm?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  referrer?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  landingPage?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  journey?: Prisma.JsonNullableWithAggregatesFilter<"Order">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
 }
@@ -520,10 +627,20 @@ export type OrderCreateInput = {
   razorpayPaymentId?: string | null
   courier?: string | null
   trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   customer?: Prisma.CustomerCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateInput = {
@@ -548,9 +665,19 @@ export type OrderUncheckedCreateInput = {
   razorpayPaymentId?: string | null
   courier?: string | null
   trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
@@ -573,10 +700,20 @@ export type OrderUpdateInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
@@ -601,9 +738,19 @@ export type OrderUncheckedUpdateInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyInput = {
@@ -628,6 +775,15 @@ export type OrderCreateManyInput = {
   razorpayPaymentId?: string | null
   courier?: string | null
   trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -652,6 +808,15 @@ export type OrderUpdateManyMutationInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -678,6 +843,15 @@ export type OrderUncheckedUpdateManyInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -714,6 +888,15 @@ export type OrderCountOrderByAggregateInput = {
   razorpayPaymentId?: Prisma.SortOrder
   courier?: Prisma.SortOrder
   trackingNumber?: Prisma.SortOrder
+  sourceChannel?: Prisma.SortOrder
+  utmSource?: Prisma.SortOrder
+  utmMedium?: Prisma.SortOrder
+  utmCampaign?: Prisma.SortOrder
+  utmContent?: Prisma.SortOrder
+  utmTerm?: Prisma.SortOrder
+  referrer?: Prisma.SortOrder
+  landingPage?: Prisma.SortOrder
+  journey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -748,6 +931,14 @@ export type OrderMaxOrderByAggregateInput = {
   razorpayPaymentId?: Prisma.SortOrder
   courier?: Prisma.SortOrder
   trackingNumber?: Prisma.SortOrder
+  sourceChannel?: Prisma.SortOrder
+  utmSource?: Prisma.SortOrder
+  utmMedium?: Prisma.SortOrder
+  utmCampaign?: Prisma.SortOrder
+  utmContent?: Prisma.SortOrder
+  utmTerm?: Prisma.SortOrder
+  referrer?: Prisma.SortOrder
+  landingPage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -773,6 +964,14 @@ export type OrderMinOrderByAggregateInput = {
   razorpayPaymentId?: Prisma.SortOrder
   courier?: Prisma.SortOrder
   trackingNumber?: Prisma.SortOrder
+  sourceChannel?: Prisma.SortOrder
+  utmSource?: Prisma.SortOrder
+  utmMedium?: Prisma.SortOrder
+  utmCampaign?: Prisma.SortOrder
+  utmContent?: Prisma.SortOrder
+  utmTerm?: Prisma.SortOrder
+  referrer?: Prisma.SortOrder
+  landingPage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -845,6 +1044,20 @@ export type EnumPaymentMethodFieldUpdateOperationsInput = {
   set?: $Enums.PaymentMethod
 }
 
+export type OrderCreateNestedOneWithoutEventsInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutEventsInput, Prisma.OrderUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutEventsInput
+  connect?: Prisma.OrderWhereUniqueInput
+}
+
+export type OrderUpdateOneRequiredWithoutEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutEventsInput, Prisma.OrderUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutEventsInput
+  upsert?: Prisma.OrderUpsertWithoutEventsInput
+  connect?: Prisma.OrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutEventsInput, Prisma.OrderUpdateWithoutEventsInput>, Prisma.OrderUncheckedUpdateWithoutEventsInput>
+}
+
 export type OrderCreateNestedOneWithoutItemsInput = {
   create?: Prisma.XOR<Prisma.OrderCreateWithoutItemsInput, Prisma.OrderUncheckedCreateWithoutItemsInput>
   connectOrCreate?: Prisma.OrderCreateOrConnectWithoutItemsInput
@@ -880,9 +1093,19 @@ export type OrderCreateWithoutCustomerInput = {
   razorpayPaymentId?: string | null
   courier?: string | null
   trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutCustomerInput = {
@@ -906,9 +1129,19 @@ export type OrderUncheckedCreateWithoutCustomerInput = {
   razorpayPaymentId?: string | null
   courier?: string | null
   trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutCustomerInput = {
@@ -962,8 +1195,176 @@ export type OrderScalarWhereInput = {
   razorpayPaymentId?: Prisma.StringNullableFilter<"Order"> | string | null
   courier?: Prisma.StringNullableFilter<"Order"> | string | null
   trackingNumber?: Prisma.StringNullableFilter<"Order"> | string | null
+  sourceChannel?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmSource?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmMedium?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmCampaign?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmContent?: Prisma.StringNullableFilter<"Order"> | string | null
+  utmTerm?: Prisma.StringNullableFilter<"Order"> | string | null
+  referrer?: Prisma.StringNullableFilter<"Order"> | string | null
+  landingPage?: Prisma.StringNullableFilter<"Order"> | string | null
+  journey?: Prisma.JsonNullableFilter<"Order">
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
+}
+
+export type OrderCreateWithoutEventsInput = {
+  id?: string
+  number?: number
+  email: string
+  phone: string
+  status?: $Enums.OrderStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentMethod?: $Enums.PaymentMethod
+  subtotal: number
+  discountTotal?: number
+  shippingTotal?: number
+  taxTotal?: number
+  total: number
+  currency?: string
+  discountCode?: string | null
+  shippingAddress: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  note?: string | null
+  razorpayOrderId?: string | null
+  razorpayPaymentId?: string | null
+  courier?: string | null
+  trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customer?: Prisma.CustomerCreateNestedOneWithoutOrdersInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+}
+
+export type OrderUncheckedCreateWithoutEventsInput = {
+  id?: string
+  number?: number
+  customerId?: string | null
+  email: string
+  phone: string
+  status?: $Enums.OrderStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentMethod?: $Enums.PaymentMethod
+  subtotal: number
+  discountTotal?: number
+  shippingTotal?: number
+  taxTotal?: number
+  total: number
+  currency?: string
+  discountCode?: string | null
+  shippingAddress: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  note?: string | null
+  razorpayOrderId?: string | null
+  razorpayPaymentId?: string | null
+  courier?: string | null
+  trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type OrderCreateOrConnectWithoutEventsInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutEventsInput, Prisma.OrderUncheckedCreateWithoutEventsInput>
+}
+
+export type OrderUpsertWithoutEventsInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutEventsInput, Prisma.OrderUncheckedUpdateWithoutEventsInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutEventsInput, Prisma.OrderUncheckedCreateWithoutEventsInput>
+  where?: Prisma.OrderWhereInput
+}
+
+export type OrderUpdateToOneWithWhereWithoutEventsInput = {
+  where?: Prisma.OrderWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutEventsInput, Prisma.OrderUncheckedUpdateWithoutEventsInput>
+}
+
+export type OrderUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  discountTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  taxTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  total?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  discountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingAddress?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneWithoutOrdersNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  discountTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  taxTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  total?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  discountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingAddress?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateWithoutItemsInput = {
@@ -987,9 +1388,19 @@ export type OrderCreateWithoutItemsInput = {
   razorpayPaymentId?: string | null
   courier?: string | null
   trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   customer?: Prisma.CustomerCreateNestedOneWithoutOrdersInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutItemsInput = {
@@ -1014,8 +1425,18 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   razorpayPaymentId?: string | null
   courier?: string | null
   trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutItemsInput = {
@@ -1054,9 +1475,19 @@ export type OrderUpdateWithoutItemsInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerUpdateOneWithoutOrdersNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutItemsInput = {
@@ -1081,8 +1512,18 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyCustomerInput = {
@@ -1106,6 +1547,15 @@ export type OrderCreateManyCustomerInput = {
   razorpayPaymentId?: string | null
   courier?: string | null
   trackingNumber?: string | null
+  sourceChannel?: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  utmContent?: string | null
+  utmTerm?: string | null
+  referrer?: string | null
+  landingPage?: string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1130,9 +1580,19 @@ export type OrderUpdateWithoutCustomerInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutCustomerInput = {
@@ -1156,9 +1616,19 @@ export type OrderUncheckedUpdateWithoutCustomerInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutCustomerInput = {
@@ -1182,6 +1652,15 @@ export type OrderUncheckedUpdateManyWithoutCustomerInput = {
   razorpayPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceChannel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmMedium?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmCampaign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utmTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referrer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  landingPage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journey?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1193,10 +1672,12 @@ export type OrderUncheckedUpdateManyWithoutCustomerInput = {
 
 export type OrderCountOutputType = {
   items: number
+  events: number
 }
 
 export type OrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | OrderCountOutputTypeCountItemsArgs
+  events?: boolean | OrderCountOutputTypeCountEventsArgs
 }
 
 /**
@@ -1214,6 +1695,13 @@ export type OrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  */
 export type OrderCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrderItemWhereInput
+}
+
+/**
+ * OrderCountOutputType without action
+ */
+export type OrderCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderEventWhereInput
 }
 
 
@@ -1239,10 +1727,20 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   razorpayPaymentId?: boolean
   courier?: boolean
   trackingNumber?: boolean
+  sourceChannel?: boolean
+  utmSource?: boolean
+  utmMedium?: boolean
+  utmCampaign?: boolean
+  utmContent?: boolean
+  utmTerm?: boolean
+  referrer?: boolean
+  landingPage?: boolean
+  journey?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   customer?: boolean | Prisma.Order$customerArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
+  events?: boolean | Prisma.Order$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
@@ -1268,6 +1766,15 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   razorpayPaymentId?: boolean
   courier?: boolean
   trackingNumber?: boolean
+  sourceChannel?: boolean
+  utmSource?: boolean
+  utmMedium?: boolean
+  utmCampaign?: boolean
+  utmContent?: boolean
+  utmTerm?: boolean
+  referrer?: boolean
+  landingPage?: boolean
+  journey?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   customer?: boolean | Prisma.Order$customerArgs<ExtArgs>
@@ -1295,6 +1802,15 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   razorpayPaymentId?: boolean
   courier?: boolean
   trackingNumber?: boolean
+  sourceChannel?: boolean
+  utmSource?: boolean
+  utmMedium?: boolean
+  utmCampaign?: boolean
+  utmContent?: boolean
+  utmTerm?: boolean
+  referrer?: boolean
+  landingPage?: boolean
+  journey?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   customer?: boolean | Prisma.Order$customerArgs<ExtArgs>
@@ -1322,14 +1838,24 @@ export type OrderSelectScalar = {
   razorpayPaymentId?: boolean
   courier?: boolean
   trackingNumber?: boolean
+  sourceChannel?: boolean
+  utmSource?: boolean
+  utmMedium?: boolean
+  utmCampaign?: boolean
+  utmContent?: boolean
+  utmTerm?: boolean
+  referrer?: boolean
+  landingPage?: boolean
+  journey?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "customerId" | "email" | "phone" | "status" | "paymentStatus" | "paymentMethod" | "subtotal" | "discountTotal" | "shippingTotal" | "taxTotal" | "total" | "currency" | "discountCode" | "shippingAddress" | "note" | "razorpayOrderId" | "razorpayPaymentId" | "courier" | "trackingNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "customerId" | "email" | "phone" | "status" | "paymentStatus" | "paymentMethod" | "subtotal" | "discountTotal" | "shippingTotal" | "taxTotal" | "total" | "currency" | "discountCode" | "shippingAddress" | "note" | "razorpayOrderId" | "razorpayPaymentId" | "courier" | "trackingNumber" | "sourceChannel" | "utmSource" | "utmMedium" | "utmCampaign" | "utmContent" | "utmTerm" | "referrer" | "landingPage" | "journey" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   customer?: boolean | Prisma.Order$customerArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
+  events?: boolean | Prisma.Order$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1344,6 +1870,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     customer: Prisma.$CustomerPayload<ExtArgs> | null
     items: Prisma.$OrderItemPayload<ExtArgs>[]
+    events: Prisma.$OrderEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1367,6 +1894,15 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     razorpayPaymentId: string | null
     courier: string | null
     trackingNumber: string | null
+    sourceChannel: string | null
+    utmSource: string | null
+    utmMedium: string | null
+    utmCampaign: string | null
+    utmContent: string | null
+    utmTerm: string | null
+    referrer: string | null
+    landingPage: string | null
+    journey: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["order"]>
@@ -1765,6 +2301,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   customer<T extends Prisma.Order$customerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$customerArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Order$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  events<T extends Prisma.Order$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1815,6 +2352,15 @@ export interface OrderFieldRefs {
   readonly razorpayPaymentId: Prisma.FieldRef<"Order", 'String'>
   readonly courier: Prisma.FieldRef<"Order", 'String'>
   readonly trackingNumber: Prisma.FieldRef<"Order", 'String'>
+  readonly sourceChannel: Prisma.FieldRef<"Order", 'String'>
+  readonly utmSource: Prisma.FieldRef<"Order", 'String'>
+  readonly utmMedium: Prisma.FieldRef<"Order", 'String'>
+  readonly utmCampaign: Prisma.FieldRef<"Order", 'String'>
+  readonly utmContent: Prisma.FieldRef<"Order", 'String'>
+  readonly utmTerm: Prisma.FieldRef<"Order", 'String'>
+  readonly referrer: Prisma.FieldRef<"Order", 'String'>
+  readonly landingPage: Prisma.FieldRef<"Order", 'String'>
+  readonly journey: Prisma.FieldRef<"Order", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Order", 'DateTime'>
 }
@@ -2258,6 +2804,30 @@ export type Order$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.OrderItemScalarFieldEnum | Prisma.OrderItemScalarFieldEnum[]
+}
+
+/**
+ * Order.events
+ */
+export type Order$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderEvent
+   */
+  select?: Prisma.OrderEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderEvent
+   */
+  omit?: Prisma.OrderEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderEventInclude<ExtArgs> | null
+  where?: Prisma.OrderEventWhereInput
+  orderBy?: Prisma.OrderEventOrderByWithRelationInput | Prisma.OrderEventOrderByWithRelationInput[]
+  cursor?: Prisma.OrderEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderEventScalarFieldEnum | Prisma.OrderEventScalarFieldEnum[]
 }
 
 /**

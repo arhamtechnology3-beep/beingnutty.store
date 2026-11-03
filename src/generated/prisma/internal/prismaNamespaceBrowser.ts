@@ -65,6 +65,7 @@ export const ModelName = {
   CartItem: 'CartItem',
   Discount: 'Discount',
   Order: 'Order',
+  OrderEvent: 'OrderEvent',
   OrderItem: 'OrderItem',
   Page: 'Page',
   BlogPost: 'BlogPost',
@@ -310,11 +311,32 @@ export const OrderScalarFieldEnum = {
   razorpayPaymentId: 'razorpayPaymentId',
   courier: 'courier',
   trackingNumber: 'trackingNumber',
+  sourceChannel: 'sourceChannel',
+  utmSource: 'utmSource',
+  utmMedium: 'utmMedium',
+  utmCampaign: 'utmCampaign',
+  utmContent: 'utmContent',
+  utmTerm: 'utmTerm',
+  referrer: 'referrer',
+  landingPage: 'landingPage',
+  journey: 'journey',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const OrderEventScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  type: 'type',
+  message: 'message',
+  meta: 'meta',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderEventScalarFieldEnum = (typeof OrderEventScalarFieldEnum)[keyof typeof OrderEventScalarFieldEnum]
 
 
 export const OrderItemScalarFieldEnum = {
