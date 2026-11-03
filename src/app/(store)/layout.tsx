@@ -1,3 +1,4 @@
+import { AttributionTracker } from "@/components/store/attribution-tracker";
 import { CartDrawerLoader } from "@/components/store/cart-drawer-loader";
 import { FloatingActions } from "@/components/store/floating-actions";
 import { Footer } from "@/components/store/footer";
@@ -29,6 +30,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
         Skip to content
       </a>
       <SmoothScroll />
+      <AttributionTracker />
       <Header announcements={announcements} />
       <main id="main">{children}</main>
       <Footer />

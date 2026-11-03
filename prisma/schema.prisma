@@ -305,16 +305,42 @@ model Order {
   razorpayPaymentId String?
   courier           String?
   trackingNumber    String?
+  // Marketing attribution (Shopify-style “where did they come from?”)
+  sourceChannel     String?
+  utmSource         String?
+  utmMedium         String?
+  utmCampaign       String?
+  utmContent        String?
+  utmTerm           String?
+  referrer          String?
+  landingPage       String?
+  journey           Json?
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
 
-  customer Customer?   @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customer Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
   items    OrderItem[]
+  events   OrderEvent[]
 
   @@index([customerId])
   @@index([status])
   @@index([createdAt])
+  @@index([sourceChannel])
   @@map("orders")
+}
+
+/** Timeline of what happened on an order (placed, paid, emailed, shipped…). */
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  type      String
+  message   String
+  meta      Json?
+  createdAt DateTime @default(now())
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt])
+  @@map("order_events")
 }
 
 model OrderItem {

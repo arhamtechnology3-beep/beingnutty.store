@@ -5,6 +5,7 @@ import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { Lock } from "lucide-react";
+import { checkoutAttributionPayload, trackJourney } from "@/lib/attribution";
 import { cartTotals, useCartLines } from "@/lib/cart-store";
 import { INDIAN_STATES } from "@/lib/india";
 import type { Quote } from "@/lib/orders";
@@ -105,6 +106,8 @@ export function CheckoutForm({
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     setError(null);
+    trackJourney({ type: "checkout", path: "/checkout" });
+    const { attribution, journey } = checkoutAttributionPayload();
     const input: CheckoutInput = {
       lines: lines.map((l) => ({ variantId: l.variantId, quantity: l.quantity })),
       discountCode: appliedCode || undefined,
@@ -118,6 +121,8 @@ export function CheckoutForm({
       pincode: String(formData.get("pincode") ?? ""),
       paymentMethod,
       note: String(formData.get("note") ?? "") || undefined,
+      attribution: attribution ?? undefined,
+      journey,
     };
 
     startTransition(async () => {

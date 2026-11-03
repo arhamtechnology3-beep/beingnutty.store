@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { trackJourney } from "@/lib/attribution";
 
 export type CartLine = {
   variantId: string;
@@ -66,6 +67,12 @@ export const cart = {
         ? lines.map((l) => (l.variantId === line.variantId ? { ...l, ...line, quantity: Math.min(l.quantity + quantity, 20) } : l))
         : [...lines, { ...line, quantity }],
     );
+    trackJourney({
+      type: "add_to_cart",
+      productSlug: line.slug,
+      productTitle: line.title,
+      variantTitle: line.variantTitle,
+    });
     open = true;
     emit();
   },

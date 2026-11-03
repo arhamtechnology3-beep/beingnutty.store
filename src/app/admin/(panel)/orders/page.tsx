@@ -70,8 +70,8 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
           />
         </form>
       </div>
-      <Table head={["Order", "Date", "Customer", "Items", "Payment", "Status", "Total"]}>
-        {orders.length === 0 ? <EmptyRow cols={7}>No orders found.</EmptyRow> : null}
+      <Table head={["Order", "Date", "Customer", "Source", "Items", "Payment", "Status", "Total"]}>
+        {orders.length === 0 ? <EmptyRow cols={8}>No orders found.</EmptyRow> : null}
         {orders.map((o) => (
           <tr key={o.id} className="hover:bg-black/[0.02]">
             <td className="px-5 py-3 font-semibold">
@@ -83,6 +83,9 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
               {o.createdAt.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
             </td>
             <td className="px-5 py-3">{o.email}</td>
+            <td className="max-w-[140px] truncate px-5 py-3 text-xs text-black/60" title={o.sourceChannel ?? "Direct / Website"}>
+              {o.sourceChannel ?? "Direct / Website"}
+            </td>
             <td className="px-5 py-3">{o._count.items}</td>
             <td className="px-5 py-3">
               <span className="mr-2 text-xs text-black/50">{o.paymentMethod === "COD" ? "COD" : "Online"}</span>

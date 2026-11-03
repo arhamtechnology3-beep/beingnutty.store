@@ -147,18 +147,38 @@ export async function confirmCodOrder(orderId: string) {
   await db.$transaction(async (tx) => {
     await tx.order.update({ where: { id: orderId }, data: { status: "CONFIRMED" } });
     await commitOrder(tx, orderId);
+    await tx.orderEvent.create({
+      data: { orderId, type: "ORDER_CONFIRMED", message: "Order confirmed (cash on delivery)" },
+    });
   });
+  const { afterOrderConfirmed } = await import("./order-notify");
+  await afterOrderConfirmed(orderId);
 }
 
 /** Idempotent: safe to call from both the checkout callback and the webhook. */
 export async function markOrderPaid(razorpayOrderId: string, razorpayPaymentId: string) {
-  return db.$transaction(async (tx) => {
+  const order = await db.$transaction(async (tx) => {
     const updated = await tx.order.updateMany({
       where: { razorpayOrderId, paymentStatus: { not: "PAID" } },
       data: { paymentStatus: "PAID", status: "CONFIRMED", razorpayPaymentId },
     });
-    const order = await tx.order.findUnique({ where: { razorpayOrderId } });
-    if (updated.count === 1 && order) await commitOrder(tx, order.id);
-    return order;
+    const row = await tx.order.findUnique({ where: { razorpayOrderId } });
+    if (updated.count === 1 && row) {
+      await commitOrder(tx, row.id);
+      await tx.orderEvent.create({
+        data: {
+          orderId: row.id,
+          type: "PAYMENT_PAID",
+          message: "Payment received via Razorpay",
+          meta: { razorpayPaymentId },
+        },
+      });
+    }
+    return { order: row, newlyPaid: updated.count === 1 };
   });
+  if (order.newlyPaid && order.order) {
+    const { afterOrderConfirmed } = await import("./order-notify");
+    await afterOrderConfirmed(order.order.id);
+  }
+  return order.order;
 }

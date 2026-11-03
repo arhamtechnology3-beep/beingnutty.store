@@ -28,6 +28,32 @@ const checkoutSchema = z.object({
   pincode: z.string().regex(/^\d{6}$/, "Enter a valid 6-digit pincode"),
   paymentMethod: z.enum(["RAZORPAY", "COD"]),
   note: z.string().max(500).optional(),
+  attribution: z
+    .object({
+      utmSource: z.string().max(120).nullable().optional(),
+      utmMedium: z.string().max(120).nullable().optional(),
+      utmCampaign: z.string().max(160).nullable().optional(),
+      utmContent: z.string().max(160).nullable().optional(),
+      utmTerm: z.string().max(160).nullable().optional(),
+      referrer: z.string().max(500).nullable().optional(),
+      landingPage: z.string().max(500).nullable().optional(),
+      sourceChannel: z.string().max(120).optional(),
+    })
+    .optional(),
+  journey: z
+    .array(
+      z.object({
+        at: z.string(),
+        type: z.enum(["page", "product", "add_to_cart", "checkout"]),
+        path: z.string().optional(),
+        title: z.string().optional(),
+        productSlug: z.string().optional(),
+        productTitle: z.string().optional(),
+        variantTitle: z.string().optional(),
+      }),
+    )
+    .max(50)
+    .optional(),
 });
 
 export type CheckoutInput = z.input<typeof checkoutSchema>;
@@ -85,6 +111,7 @@ export async function placeOrder(input: CheckoutInput): Promise<PlaceOrderResult
     });
   }
 
+  const attr = data.attribution;
   const order = await db.order.create({
     data: {
       customerId: customer.id,
@@ -97,6 +124,15 @@ export async function placeOrder(input: CheckoutInput): Promise<PlaceOrderResult
       total: quote.total,
       discountCode: quote.appliedCode,
       note: data.note,
+      sourceChannel: attr?.sourceChannel ?? null,
+      utmSource: attr?.utmSource ?? null,
+      utmMedium: attr?.utmMedium ?? null,
+      utmCampaign: attr?.utmCampaign ?? null,
+      utmContent: attr?.utmContent ?? null,
+      utmTerm: attr?.utmTerm ?? null,
+      referrer: attr?.referrer ?? null,
+      landingPage: attr?.landingPage ?? null,
+      journey: data.journey ?? undefined,
       shippingAddress: {
         name: data.name,
         phone: data.phone,
@@ -116,6 +152,18 @@ export async function placeOrder(input: CheckoutInput): Promise<PlaceOrderResult
           price: i.price,
           quantity: i.quantity,
         })),
+      },
+      events: {
+        create: [
+          {
+            type: "ORDER_PLACED",
+            message: `Order placed (${data.paymentMethod === "COD" ? "cash on delivery" : "online payment"})`,
+            meta: {
+              sourceChannel: attr?.sourceChannel ?? "Direct / Website",
+              itemCount: quote.items.length,
+            },
+          },
+        ],
       },
     },
   });
