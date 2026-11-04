@@ -4,6 +4,15 @@ export function kwikpassEnabled() {
   return Boolean(process.env.NEXT_PUBLIC_KWIKPASS_MERCHANT_ID?.trim());
 }
 
+/** Server-only GoKwik app credentials (Advanced Details in dashboard). */
+export function kwikpassAppCredentials() {
+  return {
+    appId: process.env.KWIKPASS_APP_ID?.trim() || "",
+    appSecret: process.env.KWIKPASS_APP_SECRET?.trim() || "",
+    accountId: process.env.KWIKPASS_ACCOUNT_ID?.trim() || "",
+  };
+}
+
 export function kwikpassMerchantId() {
   return process.env.NEXT_PUBLIC_KWIKPASS_MERCHANT_ID?.trim() ?? "";
 }
