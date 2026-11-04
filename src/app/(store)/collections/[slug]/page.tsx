@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { KwikPassCollectionView } from "@/components/kwikpass/kwikpass-collection-view";
 import { Breadcrumbs } from "@/components/store/breadcrumbs";
 import { FaqSection } from "@/components/store/faq-section";
 import { ProductGrid } from "@/components/store/product-grid";
@@ -66,6 +67,12 @@ export default async function CollectionPage({
 
   return (
     <>
+      <KwikPassCollectionView
+        collectionId={collection.id}
+        name={collection.title}
+        imageUrl={collection.image}
+        handle={collection.slug}
+      />
       <JsonLd
         data={[
           faqLd([...faqs, ...ordering]),

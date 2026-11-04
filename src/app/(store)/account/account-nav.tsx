@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { logoutCustomer } from "./actions";
+import { LogoutButton } from "@/components/kwikpass/logout-button";
 
 const LINKS = [
   { href: "/account", label: "Orders & profile" },
@@ -19,11 +19,7 @@ export function AccountNav({ current }: { current: string }) {
           {l.label}
         </Link>
       ))}
-      <form action={logoutCustomer} className="ml-auto">
-        <button type="submit" className="text-sm font-semibold text-roast underline">
-          Sign out
-        </button>
-      </form>
+      <LogoutButton className="ml-auto text-sm font-semibold text-roast underline" />
     </nav>
   );
 }

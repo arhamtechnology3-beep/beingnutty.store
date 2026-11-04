@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { KwikPassFormsButton } from "@/components/kwikpass/kwikpass-forms-button";
 import { site } from "@/lib/site";
 import { NewsletterForm } from "./newsletter-form";
 
@@ -46,6 +47,10 @@ export function Footer() {
               <Image src="/brand/logo.png" alt="Being Nutty logo" width={900} height={895} className="h-auto w-full" />
             </Link>
             <NewsletterForm />
+            <KwikPassFormsButton
+              label="Join via KwikPass Forms"
+              className="mt-3 w-full max-w-md rounded-full border border-paper/25 px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:border-caramel hover:text-caramel"
+            />
             <address className="mt-8 flex flex-col gap-1 text-sm not-italic text-paper/70">
               <a href={`mailto:${site.email}`} className="transition-colors hover:text-caramel">
                 {site.email}

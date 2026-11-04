@@ -19,8 +19,9 @@ export async function destroyCustomerSession() {
 export const getCustomer = cache(async () => {
   const customerId = await readSessionCookie(CUSTOMER_COOKIE, "customer");
   if (!customerId) return null;
+  // Passwordless customers (KwikPass OTP / guest claim) must still resolve.
   return db.customer.findFirst({
-    where: { id: customerId, passwordHash: { not: null } },
+    where: { id: customerId },
     select: { id: true, email: true, phone: true, firstName: true, lastName: true, acceptsMarketing: true },
   });
 });

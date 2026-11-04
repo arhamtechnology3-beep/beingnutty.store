@@ -1,3 +1,4 @@
+import { KwikPassProvider } from "@/components/kwikpass/kwikpass-provider";
 import { AttributionTracker } from "@/components/store/attribution-tracker";
 import { CartDrawerLoader } from "@/components/store/cart-drawer-loader";
 import { FloatingActions } from "@/components/store/floating-actions";
@@ -22,7 +23,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
   ];
 
   return (
-    <>
+    <KwikPassProvider>
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
@@ -40,6 +41,6 @@ export default async function StoreLayout({ children }: { children: React.ReactN
         codEnabled={shipping.codEnabled}
       />
       <FloatingActions />
-    </>
+    </KwikPassProvider>
   );
 }

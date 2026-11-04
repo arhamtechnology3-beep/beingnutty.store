@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ActionForm } from "@/components/action-form";
+import { KwikPassFormsButton } from "@/components/kwikpass/kwikpass-forms-button";
+import { KwikPassLogin } from "@/components/kwikpass/kwikpass-login";
 import { Field, StorePage, storeButton, storeField } from "@/components/store/fields";
 import { getCustomer, safeNext } from "@/lib/customer-auth";
+import { kwikpassEnabled } from "@/lib/kwikpass-config";
 import { loginCustomer } from "../actions";
 
 export const metadata = { title: "Sign in" };
@@ -11,10 +14,24 @@ export default async function CustomerLoginPage({ searchParams }: PageProps<"/ac
   const { next } = await searchParams;
   const target = safeNext(typeof next === "string" ? next : null);
   if (await getCustomer()) redirect(target);
+  const kp = kwikpassEnabled();
 
   return (
     <StorePage title="Sign in" intro="Track orders, save addresses and check out faster." width="max-w-md">
-      <ActionForm action={loginCustomer} submitLabel="Sign in" pendingLabel="Signing in…" className="space-y-5" buttonClassName={`${storeButton} w-full`} tone="store">
+      {kp ? (
+        <div className="space-y-8">
+          <KwikPassLogin next={target} />
+          <KwikPassFormsButton
+            label="Open KwikForms"
+            className="w-full rounded-full border border-ink/20 px-6 py-3 text-sm font-semibold transition-colors hover:bg-ink/5"
+          />
+          <div className="relative text-center text-sm text-roast">
+            <span className="bg-cream px-3 relative z-10">or email &amp; password</span>
+            <span className="absolute inset-x-0 top-1/2 h-px bg-line" aria-hidden />
+          </div>
+        </div>
+      ) : null}
+      <ActionForm action={loginCustomer} submitLabel="Sign in" pendingLabel="Signing in…" className="mt-6 space-y-5" buttonClassName={`${storeButton} w-full`} tone="store">
         <input type="hidden" name="next" value={target} />
         <Field label="Email">
           <input name="email" type="email" required autoComplete="email" className={storeField} />

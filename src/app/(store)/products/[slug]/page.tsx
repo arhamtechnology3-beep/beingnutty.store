@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Check } from "lucide-react";
+import { KwikPassProductView } from "@/components/kwikpass/kwikpass-product-view";
 import { APlus, type RangeRow } from "@/components/store/aplus";
 import { BoughtTogether } from "@/components/store/bought-together";
 import { Breadcrumbs } from "@/components/store/breadcrumbs";
@@ -143,6 +144,14 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
 
   return (
     <>
+      <KwikPassProductView
+        productId={product.id}
+        variantId={product.variants[0]?.id}
+        imageUrl={product.images[0]?.url ?? null}
+        name={product.title}
+        price={Math.min(...product.variants.map((v) => v.price))}
+        handle={product.slug}
+      />
       <JsonLd data={[productLd(product, shipping), ...(answerFaqs.length ? [faqLd(answerFaqs)] : [])]} />
       <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-28 md:px-10 md:pt-32">
         <Breadcrumbs
