@@ -93,6 +93,17 @@ export function Footer() {
             FSSAI Lic. No. {site.fssaiLicence} · Manufactured &amp; marketed by {site.manufacturer}
           </p>
         </div>
+        <p className="mt-3 text-sm text-paper/50">
+          Design &amp; develop by{" "}
+          <a
+            href="https://arhamtechnology.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-paper/70 transition-colors hover:text-caramel"
+          >
+            Arham Technology
+          </a>
+        </p>
       </div>
     </footer>
   );

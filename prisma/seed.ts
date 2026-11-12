@@ -3,9 +3,13 @@ import bcrypt from "bcryptjs";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { SEED_COLLECTIONS, SEED_PRODUCTS } from "../src/lib/catalog-data";
+import { matchProductSlugs } from "../src/lib/seo-collections";
 
 const prisma = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }),
+  adapter: new PrismaPg({
+    connectionString: process.env.DATABASE_URL!,
+    ssl: /localhost|127\.0\.0\.1/.test(process.env.DATABASE_URL ?? "") ? false : { rejectUnauthorized: false },
+  }),
 });
 
 // Draft copy — review with the business (and a lawyer for policies) before launch.
@@ -60,25 +64,39 @@ async function main() {
   }
 
   for (const [position, c] of SEED_COLLECTIONS.entries()) {
-    const collection = await prisma.collection.upsert({
+    const data = {
+      title: c.title,
+      description: c.description,
+      body: c.body,
+      seoTitle: c.seoTitle,
+      seoDescription: c.seoDescription,
+      image: c.image,
+      featured: Boolean(c.featured),
+      published: true,
+      position,
+    };
+    await prisma.collection.upsert({
       where: { slug: c.slug },
-      update: { title: c.title, description: c.description, position },
-      create: { ...c, position },
+      update: data,
+      create: { slug: c.slug, ...data },
     });
-    if (c.image && !collection.image) {
-      await prisma.collection.update({ where: { id: collection.id }, data: { image: c.image } });
-    }
   }
 
+  // Unpublish legacy collections that are no longer in the SEO map (e.g. old "dates" draft).
+  const keep = new Set(SEED_COLLECTIONS.map((c) => c.slug));
+  await prisma.collection.updateMany({
+    where: { slug: { notIn: [...keep] } },
+    data: { published: false },
+  });
+
   for (const p of SEED_PRODUCTS) {
-    const { variants, collections, faqs, images = [], ...fields } = p;
+    const { variants, collections: _legacy, faqs, images = [], ...fields } = p;
     const product = await prisma.product.upsert({
       where: { slug: p.slug },
       update: {},
       create: { ...fields, faqs, status: "ACTIVE" },
     });
 
-    // Fill gaps only, so edits made in the admin are never overwritten.
     const gaps = {
       ...(fields.ingredients && !product.ingredients && { ingredients: fields.ingredients }),
       ...(fields.origin && !product.origin && { origin: fields.origin }),
@@ -99,14 +117,29 @@ async function main() {
         create: { ...v, position, productId: product.id, inventoryQty: 100 },
       });
     }
+  }
 
-    for (const slug of collections) {
-      const collection = await prisma.collection.findUniqueOrThrow({ where: { slug } });
+  // Link products ↔ collections from SEO match rules against live catalog tags.
+  const allProducts = await prisma.product.findMany({ select: { id: true, slug: true, tags: true } });
+  const bySlug = new Map(allProducts.map((p) => [p.slug, p]));
+  const tagged = allProducts.map((p) => ({ slug: p.slug, tags: p.tags }));
+
+  for (const c of SEED_COLLECTIONS) {
+    const collection = await prisma.collection.findUniqueOrThrow({ where: { slug: c.slug } });
+    const slugs = new Set(matchProductSlugs(c, tagged));
+    for (const p of SEED_PRODUCTS) {
+      if (p.collections.includes(c.slug)) slugs.add(p.slug);
+    }
+    let position = 0;
+    for (const slug of slugs) {
+      const product = bySlug.get(slug);
+      if (!product) continue;
       await prisma.productCollection.upsert({
         where: { productId_collectionId: { productId: product.id, collectionId: collection.id } },
-        update: {},
-        create: { productId: product.id, collectionId: collection.id },
+        update: { position },
+        create: { productId: product.id, collectionId: collection.id, position },
       });
+      position += 1;
     }
   }
 
@@ -120,7 +153,7 @@ async function main() {
     create: { key: "shipping", value: { flatRate: 4900, freeAbove: 49900 } },
   });
 
-  console.log(`Seeded ${SEED_PRODUCTS.length} products, ${SEED_COLLECTIONS.length} collections.`);
+  console.log(`Seeded ${SEED_PRODUCTS.length} products, ${SEED_COLLECTIONS.length} SEO collections.`);
 }
 
 main()

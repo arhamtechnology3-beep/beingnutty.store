@@ -98,15 +98,25 @@ export function NutStory() {
         });
         tl.to(track.current, { x: () => -distance(), ease: "none" }, 0);
 
+        // Keep each can in its layout spot; only a light settle as the chapter centers — no left drift.
         panels.forEach((panel) => {
+          const can = panel.querySelector<HTMLElement>("[data-chapter-can]");
+          if (!can) return;
           gsap.fromTo(
-            panel.querySelector("[data-chapter-can]"),
-            { rotate: 18, y: desktop ? 80 : 40 },
+            can,
+            { x: 0, rotate: 10, y: desktop ? 28 : 16 },
             {
-              rotate: -8,
-              y: -20,
+              x: 0,
+              rotate: -4,
+              y: 0,
               ease: "none",
-              scrollTrigger: { trigger: panel, containerAnimation: tl, start: "left right", end: "right left", scrub: true },
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: tl,
+                start: "left 75%",
+                end: "left 25%",
+                scrub: true,
+              },
             },
           );
         });
@@ -156,7 +166,7 @@ export function NutStory() {
               </div>
               <div className="relative z-10 mx-auto w-[min(46vw,27svh,220px)] max-md:[@media(max-height:700px)]:w-[22svh] md:mx-0 md:ml-auto md:mr-[8vw] md:w-[min(60vw,280px)]">
                 <c.Icon className="absolute -left-12 -top-6 w-16 animate-[bob_7s_ease-in-out_infinite] md:-left-16 md:-top-10 md:w-32" aria-hidden />
-                <div data-chapter-can>
+                <div data-chapter-can className="origin-center will-change-transform">
                   <CanPhoto slug={c.photo} sizes="(min-width: 768px) 280px, 46vw" />
                 </div>
                 <c.Icon className="absolute -bottom-4 -right-10 w-14 rotate-45 animate-[bob_5s_ease-in-out_infinite] md:-bottom-6 md:-right-14 md:w-24" aria-hidden />

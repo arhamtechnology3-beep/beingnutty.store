@@ -20,7 +20,7 @@ export function ProductShowcase({ products }: { products: CardProduct[] }) {
   const visible = filter === "all" ? products : products.filter((p) => p.tags.includes(filter));
 
   return (
-    <section aria-labelledby="range-title" className="mx-auto max-w-[1400px] px-5 py-28 md:px-10 md:py-36">
+    <section aria-labelledby="range-title" className="mx-auto max-w-[1400px] px-5 pb-20 pt-6 md:px-10 md:pb-28 md:pt-8">
       <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-roast">The range</p>
@@ -55,11 +55,11 @@ export function ProductShowcase({ products }: { products: CardProduct[] }) {
             <motion.li
               key={p.id}
               layout
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              // Animate on mount — whileInView stays at opacity 0 under Lenis/pinned scroll.
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.7, delay: (i % 4) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.55, delay: (i % 4) * 0.06, ease: [0.16, 1, 0.3, 1] }}
             >
               <ProductCard product={p} />
             </motion.li>

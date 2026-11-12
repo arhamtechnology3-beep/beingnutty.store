@@ -15,7 +15,7 @@ import {
 } from "motion/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { CanPhoto, type CanPhotoSlug } from "@/components/visuals/can-photo";
 import { cn, formatINR } from "@/lib/utils";
 import { Almond, Cashew, Pistachio } from "@/components/visuals/nuts";
@@ -174,7 +174,7 @@ export function Hero({ cans: list }: { cans: HeroCan[] }) {
     <section
       ref={root}
       aria-labelledby="hero-title"
-      className="grain relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pb-16 pt-28"
+      className="grain relative flex min-h-0 flex-col items-center justify-center overflow-hidden px-5 pb-8 pt-28 md:pb-10"
     >
       <motion.div
         aria-hidden
@@ -313,7 +313,7 @@ export function Hero({ cans: list }: { cans: HeroCan[] }) {
 
       <motion.div
         data-hero-copy
-        className="relative z-20 mt-8 flex max-w-xl flex-col items-center text-center md:mt-28"
+        className="relative z-20 mt-6 flex max-w-xl flex-col items-center text-center md:mt-10"
         initial={{ opacity: 0, y: 24 }}
         animate={ready ? { opacity: 1, y: 0 } : undefined}
         transition={{ delay: 0.7, duration: 1, ease }}
@@ -337,9 +337,6 @@ export function Hero({ cans: list }: { cans: HeroCan[] }) {
 
       <RotatingBadge />
 
-      <div aria-hidden className="absolute bottom-6 left-1/2 -translate-x-1/2 text-roast/70">
-        <ArrowDown className="size-5 animate-bounce" />
-      </div>
     </section>
   );
 }

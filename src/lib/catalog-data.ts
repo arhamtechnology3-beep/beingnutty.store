@@ -31,12 +31,8 @@ export type SeedProduct = {
   images?: SeedImage[];
 };
 
-export type SeedCollection = {
-  slug: string;
-  title: string;
-  description: string;
-  image?: string;
-};
+export type { SeoCollection as SeedCollection } from "./seo-collections";
+import { SEO_COLLECTIONS } from "./seo-collections";
 
 type PhotoKind = "front" | "tall-can" | "poured" | "styled" | "close-up" | "label";
 
@@ -59,35 +55,8 @@ function photos(slug: string, name: string, kinds: PhotoKind[]): SeedImage[] {
 const FULL_SET: PhotoKind[] = ["front", "tall-can", "poured", "styled", "close-up", "label"];
 const SHORT_SET: PhotoKind[] = ["front", "tall-can", "styled", "label"];
 
-export const SEED_COLLECTIONS: SeedCollection[] = [
-  {
-    slug: "dry-fruits",
-    title: "All Dry Fruits",
-    description:
-      "The complete Being Nutty range — whole cashews, almonds, pistachios, smoked nuts and dry fruit mixes, packed in cans.",
-    image: "/images/lifestyle/range-tall.jpg",
-  },
-  {
-    slug: "raw-nuts",
-    title: "Raw Nuts",
-    description:
-      "Whole kaju, badam and pista, packed as they are — for snacking, cooking, sweets and soaking overnight.",
-    image: "/images/lifestyle/range-trio-bowls.jpg",
-  },
-  {
-    slug: "roasted-nuts",
-    title: "Smoked Nuts",
-    description:
-      "Smoked kaju, badam, pista and mix — roasted with a pinch of iodised salt and a touch of olive oil for a smoky, ready-to-eat crunch.",
-    image: "/images/lifestyle/smoked-trio.jpg",
-  },
-  {
-    slug: "mixes",
-    title: "Dry Fruit Mixes",
-    description: "Ready-to-snack blends of cashews, almonds and pistachios, raw or smoked.",
-    image: "/images/lifestyle/mix-styled.jpg",
-  },
-];
+/** Hub + keyword collections (30+) with ~1500-char SEO bodies. */
+export const SEED_COLLECTIONS = SEO_COLLECTIONS;
 
 const CAN_500 = "500 ml can";
 const CAN_750 = "750 ml tall can";

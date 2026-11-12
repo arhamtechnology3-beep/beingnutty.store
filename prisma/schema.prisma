@@ -125,9 +125,11 @@ model Collection {
   title          String
   slug           String   @unique
   description    String?
+  body           String?
   image          String?
   position       Int      @default(0)
   published      Boolean  @default(true)
+  featured       Boolean  @default(false)
   seoTitle       String?
   seoDescription String?
   createdAt      DateTime @default(now())

@@ -40,6 +40,17 @@ export function firstAvailable(p: MiniProduct) {
   return p.variants.find((v) => v.available) ?? null;
 }
 
+/** Prefer the largest in-stock size (buyers see best value first). */
+export function largestAvailable<T extends { title: string; available: boolean }>(variants: T[]) {
+  return (
+    [...variants]
+      .filter((v) => v.available)
+      .sort((a, b) => (grams(b.title) ?? 0) - (grams(a.title) ?? 0))[0] ??
+    variants[0] ??
+    null
+  );
+}
+
 /** "250g" → 250, "1 kg" → 1000. */
 export function grams(title: string) {
   const m = title.match(/(\d+(?:\.\d+)?)\s*(kg|g)\b/i);

@@ -29,15 +29,26 @@ function connectionString() {
   return u.toString();
 }
 
+function useSsl(connection: string) {
+  try {
+    const host = new URL(connection).hostname;
+    // Local Postgres has no TLS; Hostinger/Supabase need encrypt-without-verify.
+    if (!host || host === "localhost" || host === "127.0.0.1" || host === "::1") return false;
+  } catch {
+    return false;
+  }
+  return { rejectUnauthorized: false } as const;
+}
+
 function getPool() {
   if (globalForPrisma.pgPool) return globalForPrisma.pgPool;
   const missing = !process.env.DATABASE_URL?.trim();
+  const connection = connectionString();
   const pool = new pg.Pool({
-    connectionString: connectionString(),
+    connectionString: connection,
     max: 5,
     connectionTimeoutMillis: missing ? 500 : 15_000,
-    // Required on Hostinger: encrypt without verifying the proxy/CA chain.
-    ssl: missing ? false : { rejectUnauthorized: false },
+    ssl: missing ? false : useSsl(connection),
   });
   pool.on("error", (err) => console.error("[db] idle client error", err.message));
   globalForPrisma.pgPool = pool;

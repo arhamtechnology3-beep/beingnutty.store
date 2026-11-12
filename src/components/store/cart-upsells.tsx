@@ -29,7 +29,7 @@ export function UpgradeOffer({ line, product }: { line: CartLine; product?: Mini
     <button
       type="button"
       onClick={() => cart.swapVariant(line.variantId, { variantId: up.variant.id, variantTitle: up.variant.title, price: up.variant.price })}
-      className="mt-2 inline-flex max-w-full items-start gap-1.5 rounded-2xl bg-pista/20 px-3 py-1.5 text-left text-xs font-semibold leading-snug text-[#3f5212] transition-colors hover:bg-pista/35"
+      className="mt-2.5 inline-flex max-w-full items-start gap-1.5 rounded-full border border-[#3f5212]/15 bg-pista/18 px-3 py-1.5 text-left text-xs font-semibold leading-snug text-[#3f5212] transition-colors hover:bg-pista/32"
     >
       <ArrowUpRight className="mt-px size-3.5 shrink-0" aria-hidden />
       <span>
@@ -65,10 +65,13 @@ export function PairsWell({
 
   return (
     <section aria-label={title}>
-      <h3 className="font-display text-lg font-bold">{title}</h3>
+      <div className="flex items-baseline justify-between gap-3">
+        <h3 className="font-display text-xl font-black tracking-tight">{title}</h3>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-roast/70">Add more</span>
+      </div>
       <ul
         className={cn(
-          "mt-3",
+          "mt-4",
           layout === "rail"
             ? "-mx-6 flex snap-x gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none]"
             : "grid grid-cols-2 gap-4 md:grid-cols-4",
@@ -77,23 +80,29 @@ export function PairsWell({
         {picks.map((p) => {
           const v = firstAvailable(p)!;
           return (
-            <li key={p.slug} className={cn("flex flex-col rounded-2xl bg-cream p-2.5", layout === "rail" && "w-36 shrink-0 snap-start")}>
+            <li
+              key={p.slug}
+              className={cn(
+                "flex flex-col rounded-[1.25rem] border border-line/50 bg-paper/80 p-2.5 shadow-[0_8px_24px_-20px_color-mix(in_oklab,var(--ink)_40%,transparent)]",
+                layout === "rail" && "w-[9.5rem] shrink-0 snap-start",
+              )}
+            >
               <Link href={`/products/${p.slug}`} onClick={onNavigate} className="group block">
-                <LineThumb image={p.image} accentColor={p.accentColor} sizes="160px" className="aspect-square w-full rounded-xl" />
-                <p className="mt-2 line-clamp-2 text-sm font-semibold leading-tight group-hover:underline">{p.name}</p>
+                <LineThumb image={p.image} accentColor={p.accentColor} sizes="160px" className="aspect-square w-full rounded-[0.95rem]" />
+                <p className="mt-2.5 line-clamp-2 font-display text-sm font-bold leading-tight group-hover:text-roast">{p.name}</p>
               </Link>
-              <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+              <div className="mt-auto flex items-center justify-between gap-2 pt-2.5">
                 <p className="text-sm tabular-nums">
                   <span className="font-semibold">{formatINR(v.price)}</span>
-                  <span className="block text-[11px] text-roast">{v.title}</span>
+                  <span className="block text-[10px] font-medium uppercase tracking-[0.12em] text-roast/75">{v.title}</span>
                 </p>
                 <button
                   type="button"
                   onClick={() => quickAdd(p)}
                   aria-label={`Add ${p.name} ${v.title} to cart`}
-                  className="grid size-9 shrink-0 place-items-center rounded-full bg-ink text-paper transition-transform hover:scale-110"
+                  className="grid size-9 shrink-0 place-items-center rounded-full bg-ink text-paper transition-transform hover:scale-110 active:scale-95"
                 >
-                  <Plus className="size-4" />
+                  <Plus className="size-4" strokeWidth={2.25} />
                 </button>
               </div>
             </li>

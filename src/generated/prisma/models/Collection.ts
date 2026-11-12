@@ -39,9 +39,11 @@ export type CollectionMinAggregateOutputType = {
   title: string | null
   slug: string | null
   description: string | null
+  body: string | null
   image: string | null
   position: number | null
   published: boolean | null
+  featured: boolean | null
   seoTitle: string | null
   seoDescription: string | null
   createdAt: Date | null
@@ -53,9 +55,11 @@ export type CollectionMaxAggregateOutputType = {
   title: string | null
   slug: string | null
   description: string | null
+  body: string | null
   image: string | null
   position: number | null
   published: boolean | null
+  featured: boolean | null
   seoTitle: string | null
   seoDescription: string | null
   createdAt: Date | null
@@ -67,9 +71,11 @@ export type CollectionCountAggregateOutputType = {
   title: number
   slug: number
   description: number
+  body: number
   image: number
   position: number
   published: number
+  featured: number
   seoTitle: number
   seoDescription: number
   createdAt: number
@@ -91,9 +97,11 @@ export type CollectionMinAggregateInputType = {
   title?: true
   slug?: true
   description?: true
+  body?: true
   image?: true
   position?: true
   published?: true
+  featured?: true
   seoTitle?: true
   seoDescription?: true
   createdAt?: true
@@ -105,9 +113,11 @@ export type CollectionMaxAggregateInputType = {
   title?: true
   slug?: true
   description?: true
+  body?: true
   image?: true
   position?: true
   published?: true
+  featured?: true
   seoTitle?: true
   seoDescription?: true
   createdAt?: true
@@ -119,9 +129,11 @@ export type CollectionCountAggregateInputType = {
   title?: true
   slug?: true
   description?: true
+  body?: true
   image?: true
   position?: true
   published?: true
+  featured?: true
   seoTitle?: true
   seoDescription?: true
   createdAt?: true
@@ -220,9 +232,11 @@ export type CollectionGroupByOutputType = {
   title: string
   slug: string
   description: string | null
+  body: string | null
   image: string | null
   position: number
   published: boolean
+  featured: boolean
   seoTitle: string | null
   seoDescription: string | null
   createdAt: Date
@@ -257,9 +271,11 @@ export type CollectionWhereInput = {
   title?: Prisma.StringFilter<"Collection"> | string
   slug?: Prisma.StringFilter<"Collection"> | string
   description?: Prisma.StringNullableFilter<"Collection"> | string | null
+  body?: Prisma.StringNullableFilter<"Collection"> | string | null
   image?: Prisma.StringNullableFilter<"Collection"> | string | null
   position?: Prisma.IntFilter<"Collection"> | number
   published?: Prisma.BoolFilter<"Collection"> | boolean
+  featured?: Prisma.BoolFilter<"Collection"> | boolean
   seoTitle?: Prisma.StringNullableFilter<"Collection"> | string | null
   seoDescription?: Prisma.StringNullableFilter<"Collection"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
@@ -272,9 +288,11 @@ export type CollectionOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  body?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   position?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  featured?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -290,9 +308,11 @@ export type CollectionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CollectionWhereInput | Prisma.CollectionWhereInput[]
   title?: Prisma.StringFilter<"Collection"> | string
   description?: Prisma.StringNullableFilter<"Collection"> | string | null
+  body?: Prisma.StringNullableFilter<"Collection"> | string | null
   image?: Prisma.StringNullableFilter<"Collection"> | string | null
   position?: Prisma.IntFilter<"Collection"> | number
   published?: Prisma.BoolFilter<"Collection"> | boolean
+  featured?: Prisma.BoolFilter<"Collection"> | boolean
   seoTitle?: Prisma.StringNullableFilter<"Collection"> | string | null
   seoDescription?: Prisma.StringNullableFilter<"Collection"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
@@ -305,9 +325,11 @@ export type CollectionOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  body?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   position?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  featured?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -327,9 +349,11 @@ export type CollectionScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Collection"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Collection"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Collection"> | string | null
+  body?: Prisma.StringNullableWithAggregatesFilter<"Collection"> | string | null
   image?: Prisma.StringNullableWithAggregatesFilter<"Collection"> | string | null
   position?: Prisma.IntWithAggregatesFilter<"Collection"> | number
   published?: Prisma.BoolWithAggregatesFilter<"Collection"> | boolean
+  featured?: Prisma.BoolWithAggregatesFilter<"Collection"> | boolean
   seoTitle?: Prisma.StringNullableWithAggregatesFilter<"Collection"> | string | null
   seoDescription?: Prisma.StringNullableWithAggregatesFilter<"Collection"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Collection"> | Date | string
@@ -341,9 +365,11 @@ export type CollectionCreateInput = {
   title: string
   slug: string
   description?: string | null
+  body?: string | null
   image?: string | null
   position?: number
   published?: boolean
+  featured?: boolean
   seoTitle?: string | null
   seoDescription?: string | null
   createdAt?: Date | string
@@ -356,9 +382,11 @@ export type CollectionUncheckedCreateInput = {
   title: string
   slug: string
   description?: string | null
+  body?: string | null
   image?: string | null
   position?: number
   published?: boolean
+  featured?: boolean
   seoTitle?: string | null
   seoDescription?: string | null
   createdAt?: Date | string
@@ -371,9 +399,11 @@ export type CollectionUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -386,9 +416,11 @@ export type CollectionUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -401,9 +433,11 @@ export type CollectionCreateManyInput = {
   title: string
   slug: string
   description?: string | null
+  body?: string | null
   image?: string | null
   position?: number
   published?: boolean
+  featured?: boolean
   seoTitle?: string | null
   seoDescription?: string | null
   createdAt?: Date | string
@@ -415,9 +449,11 @@ export type CollectionUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -429,9 +465,11 @@ export type CollectionUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -443,9 +481,11 @@ export type CollectionCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  body?: Prisma.SortOrder
   image?: Prisma.SortOrder
   position?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  featured?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -461,9 +501,11 @@ export type CollectionMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  body?: Prisma.SortOrder
   image?: Prisma.SortOrder
   position?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  featured?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -475,9 +517,11 @@ export type CollectionMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  body?: Prisma.SortOrder
   image?: Prisma.SortOrder
   position?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  featured?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -512,9 +556,11 @@ export type CollectionCreateWithoutProductsInput = {
   title: string
   slug: string
   description?: string | null
+  body?: string | null
   image?: string | null
   position?: number
   published?: boolean
+  featured?: boolean
   seoTitle?: string | null
   seoDescription?: string | null
   createdAt?: Date | string
@@ -526,9 +572,11 @@ export type CollectionUncheckedCreateWithoutProductsInput = {
   title: string
   slug: string
   description?: string | null
+  body?: string | null
   image?: string | null
   position?: number
   published?: boolean
+  featured?: boolean
   seoTitle?: string | null
   seoDescription?: string | null
   createdAt?: Date | string
@@ -556,9 +604,11 @@ export type CollectionUpdateWithoutProductsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -570,9 +620,11 @@ export type CollectionUncheckedUpdateWithoutProductsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -615,9 +667,11 @@ export type CollectionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   title?: boolean
   slug?: boolean
   description?: boolean
+  body?: boolean
   image?: boolean
   position?: boolean
   published?: boolean
+  featured?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
   createdAt?: boolean
@@ -631,9 +685,11 @@ export type CollectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   title?: boolean
   slug?: boolean
   description?: boolean
+  body?: boolean
   image?: boolean
   position?: boolean
   published?: boolean
+  featured?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
   createdAt?: boolean
@@ -645,9 +701,11 @@ export type CollectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   title?: boolean
   slug?: boolean
   description?: boolean
+  body?: boolean
   image?: boolean
   position?: boolean
   published?: boolean
+  featured?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
   createdAt?: boolean
@@ -659,16 +717,18 @@ export type CollectionSelectScalar = {
   title?: boolean
   slug?: boolean
   description?: boolean
+  body?: boolean
   image?: boolean
   position?: boolean
   published?: boolean
+  featured?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "image" | "position" | "published" | "seoTitle" | "seoDescription" | "createdAt" | "updatedAt", ExtArgs["result"]["collection"]>
+export type CollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "body" | "image" | "position" | "published" | "featured" | "seoTitle" | "seoDescription" | "createdAt" | "updatedAt", ExtArgs["result"]["collection"]>
 export type CollectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   products?: boolean | Prisma.Collection$productsArgs<ExtArgs>
   _count?: boolean | Prisma.CollectionCountOutputTypeDefaultArgs<ExtArgs>
@@ -686,9 +746,11 @@ export type $CollectionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     title: string
     slug: string
     description: string | null
+    body: string | null
     image: string | null
     position: number
     published: boolean
+    featured: boolean
     seoTitle: string | null
     seoDescription: string | null
     createdAt: Date
@@ -1121,9 +1183,11 @@ export interface CollectionFieldRefs {
   readonly title: Prisma.FieldRef<"Collection", 'String'>
   readonly slug: Prisma.FieldRef<"Collection", 'String'>
   readonly description: Prisma.FieldRef<"Collection", 'String'>
+  readonly body: Prisma.FieldRef<"Collection", 'String'>
   readonly image: Prisma.FieldRef<"Collection", 'String'>
   readonly position: Prisma.FieldRef<"Collection", 'Int'>
   readonly published: Prisma.FieldRef<"Collection", 'Boolean'>
+  readonly featured: Prisma.FieldRef<"Collection", 'Boolean'>
   readonly seoTitle: Prisma.FieldRef<"Collection", 'String'>
   readonly seoDescription: Prisma.FieldRef<"Collection", 'String'>
   readonly createdAt: Prisma.FieldRef<"Collection", 'DateTime'>

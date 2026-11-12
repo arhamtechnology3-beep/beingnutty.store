@@ -4,11 +4,24 @@ import { useState } from "react";
 import { Check, Flame, Plus, Star } from "lucide-react";
 import type { CardProduct } from "@/lib/catalog";
 import { cart } from "@/lib/cart-store";
-import { bulkSaving } from "@/lib/recommend";
+import { bulkSaving, grams, largestAvailable, pricePer100g } from "@/lib/recommend";
 import { HardLink } from "./hard-link";
 import { ProductStage } from "./product-stage";
 import { WishlistButton } from "./wishlist-button";
 import { cn, formatINR, savePercent } from "@/lib/utils";
+
+function sizeSavePercent(
+  variants: CardProduct["variants"],
+  v: CardProduct["variants"][number],
+) {
+  const mrp = savePercent(v.price, v.compareAtPrice);
+  const bulk = bulkSaving(variants, v)?.percent ?? 0;
+  if (mrp || bulk) return Math.max(mrp, bulk);
+  // Smaller packs often have no MRP cut — still show the % saved by stepping up size.
+  const biggest = largestAvailable(variants);
+  if (!biggest || biggest.id === v.id) return 0;
+  return bulkSaving(variants, biggest)?.percent ?? 0;
+}
 
 export function ProductCard({
   product,
@@ -17,19 +30,37 @@ export function ProductCard({
   product: CardProduct;
   priority?: boolean;
 }) {
-  const [variantId, setVariantId] = useState(product.variants[0]?.id);
+  const preferred = largestAvailable(product.variants);
+  const [variantId, setVariantId] = useState(preferred?.id ?? product.variants[0]?.id);
   const [added, setAdded] = useState(false);
   const variant =
-    product.variants.find((v) => v.id === variantId) ?? product.variants[0];
+    product.variants.find((v) => v.id === variantId) ?? preferred ?? product.variants[0];
   const [name, subtitle = product.shortDescription ?? ""] = product.title
-    .split("—")
+    .split(/\s*[—–-]\s*/)
     .map((s) => s.trim());
 
   if (!variant) return null;
+
   const mrpSave = savePercent(variant.price, variant.compareAtPrice);
-  const bulk = mrpSave ? null : bulkSaving(product.variants, variant);
-  const save = mrpSave || bulk?.percent;
+  const bulk = bulkSaving(product.variants, variant);
+  const per100 = pricePer100g(variant);
+  const biggest = largestAvailable(product.variants);
+  const biggestBulk = biggest ? bulkSaving(product.variants, biggest) : null;
+  const selectedGrams = grams(variant.title);
+  const biggestGrams = biggest ? grams(biggest.title) : null;
+  const onSmaller =
+    !!biggest &&
+    !!selectedGrams &&
+    !!biggestGrams &&
+    selectedGrams < biggestGrams &&
+    biggest.id !== variant.id &&
+    !!biggestBulk;
+
   const href = `/products/${product.slug}`;
+  const topSave = Math.max(
+    ...product.variants.map((v) => sizeSavePercent(product.variants, v)),
+    0,
+  );
 
   const add = () => {
     cart.add({
@@ -46,13 +77,9 @@ export function ProductCard({
   };
 
   return (
-    <article className="group relative flex h-full flex-col rounded-[1.75rem] bg-paper p-1.5 ring-1 ring-line transition duration-500 ease-out-expo hover:-translate-y-1 hover:shadow-[0_28px_50px_-28px_rgba(42,26,16,0.45)] hover:ring-ink/15 sm:p-2">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.6rem] border border-line/55 bg-paper p-1.5 shadow-[0_14px_32px_-26px_color-mix(in_oklab,var(--ink)_50%,transparent)] transition duration-500 ease-out-expo hover:-translate-y-1 hover:border-ink/15 hover:shadow-[0_28px_48px_-28px_color-mix(in_oklab,var(--ink)_42%,transparent)] sm:p-1.5">
       <div className="relative">
-        <HardLink
-          href={href}
-          aria-label={product.title}
-          className="block overflow-hidden rounded-[1.4rem]"
-        >
+        <HardLink href={href} aria-label={product.title} className="block overflow-hidden rounded-[1.25rem]">
           <ProductStage
             slug={product.slug}
             label={name}
@@ -61,41 +88,37 @@ export function ProductCard({
             hoverImage={product.hoverImage}
             sizes="(min-width: 1024px) 22vw, 45vw"
             preload={priority}
-            className="aspect-[4/5]"
+            className="aspect-[5/6]"
           />
         </HardLink>
-        <div className="pointer-events-none absolute left-2 top-2 flex max-w-[calc(100%-3.5rem)] flex-wrap gap-1 sm:left-3 sm:top-3">
-          {save ? (
-            <span
-              className="rounded-full bg-pista px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-ink sm:px-2.5 sm:text-[11px]"
-              title={
-                bulk
-                  ? `vs buying ${variant.title} at the ${bulk.vs} price`
-                  : undefined
-              }
-            >
-              Save {save}%
-            </span>
-          ) : null}
+
+        <div className="pointer-events-none absolute left-2 top-2 flex max-w-[calc(100%-3.25rem)] flex-wrap gap-1">
           {product.tags.includes("smoked") ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-ink/85 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-paper backdrop-blur sm:px-2.5 sm:text-[11px]">
+            <span className="inline-flex items-center gap-1 rounded-full bg-ink/88 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-paper backdrop-blur">
               <Flame className="size-3" aria-hidden />
               Smoked
             </span>
           ) : null}
+          {topSave ? (
+            <span className="rounded-full bg-pista px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-ink">
+              Up to {topSave}% off
+            </span>
+          ) : null}
         </div>
+
         {product.rating ? (
           <span
-            className="pointer-events-none absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-paper/90 px-2 py-1 text-[11px] font-bold tabular-nums shadow-sm backdrop-blur sm:bottom-3 sm:left-3 sm:text-xs"
+            className="pointer-events-none absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-paper/92 px-1.5 py-0.5 text-[10px] font-bold tabular-nums shadow-sm backdrop-blur"
             aria-label={`Rated ${product.rating.average.toFixed(1)} out of 5 from ${product.rating.count} review${product.rating.count === 1 ? "" : "s"}`}
           >
-            <Star className="size-3.5 fill-caramel text-caramel" aria-hidden />
+            <Star className="size-3 fill-caramel text-caramel" aria-hidden />
             {product.rating.average.toFixed(1)}
             <span className="font-medium text-roast">({product.rating.count})</span>
           </span>
         ) : null}
+
         <WishlistButton
-          className="absolute right-2 top-2 size-9 sm:right-3 sm:top-3 sm:size-10"
+          className="absolute right-2 top-2 size-8 sm:size-9"
           item={{
             slug: product.slug,
             title: product.title,
@@ -109,59 +132,88 @@ export function ProductCard({
         />
       </div>
 
-      <div className="flex flex-1 flex-col px-1.5 pb-1.5 pt-3 sm:px-2.5 sm:pb-2">
-        <h3 className="font-display text-lg font-bold leading-tight sm:text-xl">
-          <HardLink href={href} className="line-clamp-1 hover:text-roast">
+      <div className="flex flex-1 flex-col px-1.5 pb-1.5 pt-2.5 sm:px-2">
+        <h3 className="font-display text-[1.2rem] font-black leading-[0.95] tracking-tight sm:text-[1.35rem]">
+          <HardLink href={href} className="hover:text-roast">
             {name}
           </HardLink>
         </h3>
-        <p className="mt-0.5 line-clamp-1 text-[13px] text-roast sm:text-sm">
-          {subtitle}
-        </p>
+        <p className="mt-0.5 line-clamp-1 text-xs text-roast">{subtitle}</p>
 
         <div
-          className="mt-3 flex rounded-full bg-cream p-1 ring-1 ring-inset ring-line"
+          className="mt-2.5 grid gap-1"
+          style={{ gridTemplateColumns: `repeat(${Math.min(product.variants.length, 3)}, minmax(0, 1fr))` }}
           role="radiogroup"
           aria-label={`${product.title} size`}
         >
-          {product.variants.map((v) => (
-            <button
-              key={v.id}
-              type="button"
-              role="radio"
-              aria-checked={v.id === variant.id}
-              onClick={() => setVariantId(v.id)}
-              className={cn(
-                "flex-1 rounded-full py-1 text-xs font-semibold transition",
-                v.id === variant.id
-                  ? "bg-paper text-ink shadow-[0_1px_4px_rgba(42,26,16,0.18)]"
-                  : "text-roast hover:text-ink",
-                !v.available && "line-through opacity-50",
-              )}
-            >
-              {v.title}
-            </button>
-          ))}
+          {product.variants.map((v) => {
+            const selected = v.id === variant.id;
+            const save = sizeSavePercent(product.variants, v);
+            const isBiggest = biggest?.id === v.id;
+            return (
+              <button
+                key={v.id}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                onClick={() => setVariantId(v.id)}
+                className={cn(
+                  "rounded-xl border px-1 py-1.5 text-center transition",
+                  selected
+                    ? "border-ink bg-ink text-paper"
+                    : "border-line/70 bg-cream/60 text-ink hover:border-ink/30",
+                  !v.available && "opacity-45",
+                )}
+              >
+                <span className="block text-[11px] font-bold tabular-nums leading-none sm:text-xs">{v.title}</span>
+                {save ? (
+                  <span
+                    className={cn(
+                      "mt-1 inline-block rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide",
+                      selected ? "bg-pista text-ink" : "bg-pista/30 text-[#3f5212]",
+                    )}
+                  >
+                    Save {save}%
+                  </span>
+                ) : (
+                  <span className={cn("mt-1 block text-[9px]", selected ? "text-paper/55" : "text-roast/65")}>
+                    {isBiggest ? "Best value" : "Pack"}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
-        <div className="mt-auto flex items-end justify-between gap-2 pt-3">
+        {onSmaller ? (
+          <button
+            type="button"
+            onClick={() => setVariantId(biggest!.id)}
+            className="mt-2 w-full rounded-xl bg-pista/20 px-2 py-1.5 text-left text-[11px] font-semibold leading-snug text-[#3f5212] transition hover:bg-pista/30"
+          >
+            {biggest!.title} saves {formatINR(biggestBulk!.amount)} ({biggestBulk!.percent}%)
+          </button>
+        ) : null}
+
+        <div className="mt-auto flex items-end justify-between gap-2 pt-2.5">
           <div className="min-w-0 leading-tight">
-            <p className="text-base font-bold tabular-nums sm:text-lg">
+            <p className="font-display text-lg font-black tabular-nums tracking-tight sm:text-xl">
               {formatINR(variant.price)}
             </p>
-            <p className="h-4 text-xs text-roast">
+            <p className="mt-0.5 text-[10px] text-roast sm:text-[11px]">
               {variant.stockLeft ? (
-                <span className="font-semibold text-[#b45309]">
-                  Only {variant.stockLeft} left
-                </span>
-              ) : mrpSave ? (
-                <s className="opacity-70">
-                  {formatINR(variant.compareAtPrice!)}
-                </s>
-              ) : bulk ? (
-                <span className="font-semibold text-[#3f6b2a]">
+                <span className="font-semibold text-[#b45309]">Only {variant.stockLeft} left</span>
+              ) : bulk && !onSmaller ? (
+                <span className="font-semibold text-[#3f5212]">
                   Save {formatINR(bulk.amount)} vs {bulk.vs}
                 </span>
+              ) : mrpSave ? (
+                <>
+                  <s className="opacity-65">{formatINR(variant.compareAtPrice!)}</s>
+                  <span className="ml-1 font-semibold text-[#3f5212]">Save {mrpSave}%</span>
+                </>
+              ) : per100 ? (
+                <span className="tabular-nums">{formatINR(per100)} / 100 g</span>
               ) : null}
             </p>
           </div>
@@ -170,7 +222,7 @@ export function ProductCard({
             disabled={!variant.available}
             onClick={add}
             className={cn(
-              "flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full px-3 text-sm font-semibold text-paper transition-all duration-300 disabled:opacity-40 sm:h-11 lg:px-4",
+              "flex h-10 shrink-0 items-center justify-center gap-1 rounded-full px-3.5 text-sm font-semibold text-paper transition-all duration-300 disabled:opacity-40 sm:h-10",
               added ? "bg-[#3f6b2a]" : "bg-ink hover:bg-roast",
             )}
             aria-label={
@@ -179,8 +231,8 @@ export function ProductCard({
                 : `${product.title} ${variant.title} is sold out`
             }
           >
-            {added ? <Check className="size-5" /> : <Plus className="size-5" />}
-            <span className="hidden lg:inline">{added ? "Added" : "Add"}</span>
+            {added ? <Check className="size-4" /> : <Plus className="size-4" />}
+            <span className="hidden sm:inline">{added ? "Added" : "Add"}</span>
           </button>
         </div>
       </div>

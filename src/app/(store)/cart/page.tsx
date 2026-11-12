@@ -14,7 +14,8 @@ export default async function CartPage() {
   const { products, milestones, rewards } = await getCartCatalog();
   return (
     <div className="mx-auto max-w-[1200px] px-5 pb-28 pt-28 md:px-10 md:pt-32">
-      <h1 className="font-display text-5xl font-black tracking-tight md:text-6xl">Your cart</h1>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-roast/80">Your pantry</p>
+      <h1 className="mt-2 font-display text-5xl font-black tracking-tight md:text-6xl">Cart</h1>
       <CartView products={products} milestones={milestones} rewards={rewards} />
       <RecentlyViewed title="You recently looked at" />
     </div>

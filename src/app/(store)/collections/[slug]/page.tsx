@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { KwikPassCollectionView } from "@/components/kwikpass/kwikpass-collection-view";
 import { Breadcrumbs } from "@/components/store/breadcrumbs";
+import { CollectionSeo } from "@/components/store/collection-seo";
 import { FaqSection } from "@/components/store/faq-section";
 import { ProductGrid } from "@/components/store/product-grid";
 import { buildSafe } from "@/lib/build-safe";
@@ -14,6 +15,7 @@ import {
 import { collectionFaqs, orderFaqs } from "@/lib/faq-builder";
 import { getShippingSettings } from "@/lib/orders";
 import { faqLd, JsonLd } from "@/lib/seo";
+import { SEO_COLLECTIONS } from "@/lib/seo-collections";
 import { absoluteUrl } from "@/lib/site";
 import { redirectOrNotFound } from "@/lib/redirects";
 
@@ -29,19 +31,22 @@ export async function generateMetadata({
 }: PageProps<"/collections/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const collection = await getCollectionBySlug(slug);
-  if (!collection) return {};
+  const seeded = SEO_COLLECTIONS.find((c) => c.slug === slug);
+  if (!collection && !seeded) return {};
+  const title = collection?.seoTitle ?? seeded?.seoTitle ?? `${collection?.title ?? seeded?.title} — Buy Online in India`;
   const description =
-    collection.seoDescription ?? collection.description ?? undefined;
+    collection?.seoDescription ?? seeded?.seoDescription ?? collection?.description ?? seeded?.description ?? undefined;
+  const pathSlug = collection?.slug ?? seeded?.slug ?? slug;
   return {
-    title: collection.seoTitle ?? `${collection.title} — Buy Online in India`,
+    title,
     description,
-    alternates: { canonical: `/collections/${collection.slug}` },
+    alternates: { canonical: `/collections/${pathSlug}` },
     openGraph: {
-      url: `/collections/${collection.slug}`,
-      title: collection.title,
+      url: `/collections/${pathSlug}`,
+      title,
       description,
-      ...(collection.image && {
-        images: [{ url: collection.image, alt: collection.title }],
+      ...((collection?.image || seeded?.image) && {
+        images: [{ url: (collection?.image || seeded?.image)!, alt: collection?.title ?? seeded?.title ?? title }],
       }),
     },
   };
@@ -64,6 +69,7 @@ export default async function CollectionPage({
     collection.products.map((pc) => pc.product),
   );
   const ordering = orderFaqs(shipping);
+  const navCollections = collections.filter((c) => c.featured || c.slug === collection.slug);
 
   return (
     <>
@@ -79,7 +85,7 @@ export default async function CollectionPage({
           {
             "@type": "CollectionPage",
             name: collection.title,
-            description: collection.description,
+            description: collection.seoDescription ?? collection.description,
             url: absoluteUrl(`/collections/${collection.slug}`),
             mainEntity: {
               "@type": "ItemList",
@@ -99,6 +105,7 @@ export default async function CollectionPage({
           <Breadcrumbs
             items={[
               { name: "Home", path: "/" },
+              { name: "Collections", path: "/collections" },
               {
                 name: collection.title,
                 path: `/collections/${collection.slug}`,
@@ -109,12 +116,10 @@ export default async function CollectionPage({
             {collection.title}
           </h1>
           {collection.description ? (
-            <p className="mt-6 max-w-2xl text-xl text-roast">
-              {collection.description}
-            </p>
+            <p className="mt-6 max-w-2xl text-xl text-roast">{collection.description}</p>
           ) : null}
-          <nav aria-label="Collections" className="mt-10 flex flex-wrap gap-2">
-            {collections.map((c) => (
+          <nav aria-label="Featured collections" className="mt-10 flex flex-wrap gap-2">
+            {navCollections.map((c) => (
               <Link
                 key={c.id}
                 href={`/collections/${c.slug}`}
@@ -124,6 +129,12 @@ export default async function CollectionPage({
                 {c.title}
               </Link>
             ))}
+            <Link
+              href="/collections"
+              className="rounded-full border border-dashed border-line px-5 py-2.5 text-sm font-semibold text-roast transition-colors hover:border-ink hover:text-ink"
+            >
+              All collections
+            </Link>
           </nav>
           {collection.image ? (
             <div className="relative mt-12 aspect-[16/10] overflow-hidden rounded-[2.5rem] md:aspect-[21/9]">
@@ -142,6 +153,11 @@ export default async function CollectionPage({
 
       <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
         <ProductGrid products={products} />
+
+        <div className="mt-24 md:mt-32">
+          <CollectionSeo slug={collection.slug} title={collection.title} body={collection.body} />
+        </div>
+
         <div className="mt-24 md:mt-32">
           <FaqSection
             id="collection-faq"

@@ -28,8 +28,25 @@ const cachedActiveProducts = unstable_cache(
 );
 
 const cachedCollections = unstable_cache(
-  () => softDb(() => db.collection.findMany({ where: { published: true }, orderBy: { position: "asc" } }), []),
-  ["catalog-collections"],
+  () =>
+    softDb(
+      () =>
+        db.collection.findMany({
+          where: { published: true },
+          orderBy: { position: "asc" },
+          include: {
+            _count: { select: { products: { where: { product: { status: "ACTIVE" } } } } },
+            products: {
+              where: { product: { status: "ACTIVE" } },
+              orderBy: { position: "asc" },
+              take: 8,
+              include: { product: { select: { title: true, slug: true } } },
+            },
+          },
+        }),
+      [],
+    ),
+  ["catalog-collections-v3"],
   { revalidate: 120, tags: ["collections"] },
 );
 
@@ -166,5 +183,5 @@ export async function searchProducts(query: string, limit?: number) {
 
 /** Short label used on can artwork, e.g. "Smoked Kaju" from "Smoked Kaju — Smoked Cashews". */
 export function shortTitle(title: string) {
-  return title.split("—")[0].trim();
+  return title.split(/\s*[—–-]\s*/)[0]?.trim() || title.trim();
 }
